@@ -69,7 +69,7 @@ namespace Core.Scene
                 yield return new WaitForEndOfFrame();
             } 
             
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSecondsRealtime(0.2f);
             if (loadingSlider != null) loadingSlider.material.SetFloat("_InnerFillAmount", 1f);
             asyncSceneToLoad.allowSceneActivation = true;
             yield return new WaitForEndOfFrame();
