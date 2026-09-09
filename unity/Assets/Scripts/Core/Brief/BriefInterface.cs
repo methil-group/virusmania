@@ -46,6 +46,12 @@ namespace Core.Brief
             }
         }
 
+        public void OnDestroy()
+        {
+            if (briefEndButton != null)
+                briefEndButton.onClick.RemoveListener(PutNewBrief);
+        }
+
         public void Update()
         {
             if (BriefController.Instance.actualBrief == null)
@@ -99,6 +105,7 @@ namespace Core.Brief
             
             briefPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
             briefPanel.gameObject.SetActive(true);
+            GamepadNavigation.SelectFirstSelectable(briefPanel.gameObject);
             
             LeanTween.scale(briefPanel.GetComponent<RectTransform>(), new Vector3(1f, 1f, 1f), .4f)
                 .setEase(LeanTweenType.easeSpring);

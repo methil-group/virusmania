@@ -45,6 +45,7 @@ namespace Core.End
             
             openWinPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
             openWinPanel.gameObject.SetActive(true);
+            GamepadNavigation.SelectFirstSelectable(openWinPanel.gameObject);
             if (PostProcessController.Instance != null) 
                 PostProcessController.Instance.OnShowPanelPostProcess();
             LeanTween.cancel(openWinPanel);
@@ -62,6 +63,7 @@ namespace Core.End
             
             openLosePanel.GetComponent<RectTransform>().localScale = Vector3.zero;
             openLosePanel.gameObject.SetActive(true);
+            GamepadNavigation.SelectFirstSelectable(openLosePanel.gameObject);
             if (PostProcessController.Instance != null) 
                 PostProcessController.Instance.OnShowPanelPostProcess();
             LeanTween.cancel(openLosePanel);

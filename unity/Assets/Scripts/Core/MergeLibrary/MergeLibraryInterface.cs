@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Item.Cook;
 using Core.Item.Merge;
+using Core.Input;
 using Framework.Controller;
 using UnityEngine;
 
@@ -59,6 +60,18 @@ namespace Core.MergeLibrary
                 
             }
             
+        }
+
+        public override void OpenPanel()
+        {
+            base.OpenPanel();
+            GamepadNavigation.SelectFirstSelectable(panel);
+        }
+
+        public override void ClosePanel()
+        {
+            GamepadNavigation.ClearSelection(panel);
+            base.ClosePanel();
         }
     }
 }
