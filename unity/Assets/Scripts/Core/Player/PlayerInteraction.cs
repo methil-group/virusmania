@@ -109,7 +109,8 @@ namespace Core.Player
 
             foreach (var hit in hits)
             {
-                if (hit.TryGetComponent<Interactable>(out var interactable))
+                if (hit.TryGetComponent<Interactable>(out var interactable) &&
+                    interactable.CanInteract(controller))
                 {
                     interactable.InInteractZone(controller);
                     currentFrameInteractables.Add(interactable);
@@ -136,7 +137,8 @@ namespace Core.Player
             Collider[] hits = Physics.OverlapSphere(center, interactionRadius);
             foreach (var hit in hits)
             {
-                if (hit.TryGetComponent<Interactable>(out var holdable))
+                if (hit.TryGetComponent<Interactable>(out var holdable) &&
+                    holdable.CanInteract(playerController))
                 {
                     holdable.InteractHold(playerController);
                     break;
@@ -152,7 +154,8 @@ namespace Core.Player
             Collider[] hits = Physics.OverlapSphere(center, interactionRadius);
             foreach (var hit in hits)
             {
-                if (hit.TryGetComponent<Interactable>(out var interactable))
+                if (hit.TryGetComponent<Interactable>(out var interactable) &&
+                    interactable.CanInteract(controller))
                 {
                     interactable.Interact(controller);
                     break;
