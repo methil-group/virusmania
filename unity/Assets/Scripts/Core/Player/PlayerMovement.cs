@@ -58,7 +58,6 @@ namespace Core.Player
                 direction = currentVelocity.normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
                 rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, acceleration * Time.fixedDeltaTime));
-            } else {
             }
         }
 
