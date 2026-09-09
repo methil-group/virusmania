@@ -15,13 +15,15 @@ MonoBehaviour:
   OnBoardings:
   - onBoardingName: Check the library
     onBoardingDescription: Check the library
-    onBoardingHint: Go to the library and press E to interact. This opens the Recipe
-      List, where all virus recipes are displayed.
+    onBoardingHint: Go to the library and use the interaction button (E on keyboard,
+      Y/Triangle on a controller). This opens the Recipe List, where all virus
+      recipes are displayed.
     onBoardingState: 0
   - onBoardingName: Buy 2 microbes
     onBoardingDescription: Buy 2 microbes in the shop
-    onBoardingHint: 'Go to the computer and interact with it by pressing E. Then,
-      in the shop, purchase two microbes: the Nanoclostre and the Microhaemo.'
+    onBoardingHint: 'Go to the computer and interact with it using the interaction
+      button (E on keyboard, Y/Triangle on a controller). Then, in the shop,
+      purchase two microbes: the Nanoclostre and the Microhaemo.'
     onBoardingState: 1
   - onBoardingName: Cook turbo microbe
     onBoardingDescription: Cook the Nanoclostre
@@ -32,7 +34,8 @@ MonoBehaviour:
     onBoardingDescription: Merge the microbes together
     onBoardingHint: To obtain a virus, take the cooked Nanoclostrum from the bain-marie
       and place it in the Merge Space. Then add the Microhaemo from the cart, and
-      hold E to merge them.
+      hold the interaction button (E on keyboard, Y/Triangle on a controller) to
+      merge them.
     onBoardingState: 3
   - onBoardingName: Send that item for god please
     onBoardingDescription: Send the Parvovirus B19
