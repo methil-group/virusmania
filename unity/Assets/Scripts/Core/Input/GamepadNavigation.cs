@@ -7,9 +7,15 @@ namespace Core.Input
 {
     public sealed class GamepadNavigation : MonoBehaviour
     {
+        private static bool _initialized;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
+            if (_initialized)
+                return;
+
+            _initialized = true;
             var navigationObject = new GameObject(nameof(GamepadNavigation));
             DontDestroyOnLoad(navigationObject);
             navigationObject.AddComponent<GamepadNavigation>();
