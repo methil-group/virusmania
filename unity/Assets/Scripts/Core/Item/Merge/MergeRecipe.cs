@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Core.Item.Holder;
 using UnityEngine;
 
@@ -14,21 +15,16 @@ namespace Core.Item.Merge
 
         public override bool Matches(Item[] items)
         {
-            if (items.Length != inputItems.Length) return false;
-            
+            if (items == null || inputItems == null || items.Length != inputItems.Length) return false;
+
+            var remainingItems = new List<Item>(items);
             foreach (var input in inputItems)
             {
-                bool found = false;
-                foreach (var item in items)
-                {
-                    if (item == input)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
+                int matchingIndex = remainingItems.FindIndex(item => item == input);
+                if (matchingIndex < 0)
                     return false;
+
+                remainingItems.RemoveAt(matchingIndex);
             }
 
             return true;
