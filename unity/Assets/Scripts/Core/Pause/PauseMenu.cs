@@ -69,12 +69,15 @@ namespace Core.Pause
 
             OnPanelOpen?.Invoke();
             panel.SetActive(true);
+            GamepadNavigation.SelectFirstSelectable(panel);
         }
 
         public override void ClosePanel()
         {
             if (!IsOpen) return;
             if (panel == null) return;
+
+            GamepadNavigation.ClearSelection(panel);
 
             if(PostProcessController.Instance != null) PostProcessController.Instance.OnHidePanelPostProcess();
             InputDatabase.Instance.EnableMovementInputs();

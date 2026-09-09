@@ -1,3 +1,4 @@
+using Core.Input;
 using Core.Scene;
 using Framework.Controller;
 using UnityEngine;
@@ -6,6 +7,12 @@ namespace Core.MainMenu
 {
     public class OnBoardingMainMenuController : InterfaceController<OnBoardingMainMenuController>
     {
+        public override void OpenPanel()
+        {
+            base.OpenPanel();
+            GamepadNavigation.SelectFirstSelectable(panel);
+        }
+
         public void GoOnOnBoarding()
         {
             this.ClosePanel();

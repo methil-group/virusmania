@@ -1,4 +1,5 @@
 using System;
+using Core.Input;
 using Framework.Controller;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,6 +64,7 @@ namespace Core.MainMenu
         {
             Init();
             optionPanel.gameObject.SetActive(true);
+            GamepadNavigation.SelectFirstSelectable(optionPanel.gameObject);
             if (MainMenuController.Instance != null)
                 LeanTween.scale(MainMenuController.Instance.gameObject, new Vector3(0f, 0f, 0f), duration).setEaseSpring();
             LeanTween.moveLocal(optionPanel.gameObject, _startPos, duration).setEaseSpring();
@@ -71,6 +73,7 @@ namespace Core.MainMenu
         public void CloseOption()
         {
             Init();
+            GamepadNavigation.ClearSelection(optionPanel.gameObject);
             if (MainMenuController.Instance != null)
                 LeanTween.scale(MainMenuController.Instance.gameObject, new Vector3(1f, 1f, 1f), duration).setEaseSpring();
             LeanTween.moveLocal(optionPanel.gameObject, _offscreenPos, duration)
