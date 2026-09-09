@@ -34,7 +34,7 @@ MonoBehaviour:
       and place it in the Merge Space. Then add the Microhaemo from the cart, and
       hold E to merge them.
     onBoardingState: 3
-  - onBoardingName: Send that item for god pelase
+  - onBoardingName: Send that item for god please
     onBoardingDescription: Send the Parvovirus B19
     onBoardingHint: Take the Parvovirus B19 from the treadmill and send it off now!
     onBoardingState: 4
