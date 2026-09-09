@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections;
 using Framework.Controller;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,37 +15,57 @@ namespace Core.Timer
 
         private bool _isRunning;
         private bool _stopRequested;
+        private Coroutine _timerCoroutine;
 
-        public async void LaunchTimer(float duration)
+        public void LaunchTimer(float duration)
         {
             if (_isRunning) return;
 
             TimerDuration = duration;
             CurrentTime = 0f;
-            _isRunning = true;
             _stopRequested = false;
+            _isRunning = true;
+            _timerCoroutine = StartCoroutine(RunTimer());
+        }
 
-            while (CurrentTime < duration)
+        private IEnumerator RunTimer()
+        {
+            while (CurrentTime < TimerDuration)
             {
                 if (_stopRequested) break;
 
-                await Task.Yield();
+                yield return null;
                 CurrentTime += Time.deltaTime;
                 OnTimerTick?.Invoke(CurrentTime);
             }
 
-            if (!_stopRequested)
+            bool timerCompleted = !_stopRequested && CurrentTime >= TimerDuration;
+            _isRunning = false;
+
+            if (timerCompleted)
                 OnTimerEnd?.Invoke();
 
-            _isRunning = false;
             CurrentTime = 0f;
             TimerDuration = 0f;
+            _timerCoroutine = null;
         }
 
         public void StopTimer()
         {
             if (!_isRunning) return;
             _stopRequested = true;
+        }
+
+        private void OnDisable()
+        {
+            if (_timerCoroutine != null)
+                StopCoroutine(_timerCoroutine);
+
+            _timerCoroutine = null;
+            _isRunning = false;
+            _stopRequested = true;
+            CurrentTime = 0f;
+            TimerDuration = 0f;
         }
     }
 }
