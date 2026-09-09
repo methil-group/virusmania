@@ -27,12 +27,14 @@ namespace Core.End
             openWinPanel.gameObject.SetActive(false);
             openLosePanel.gameObject.SetActive(false);
             
-            TimerController.Instance.OnTimerEnd += OpenLosePanel;
+            if (TimerController.Instance != null)
+                TimerController.Instance.OnTimerEnd += OpenLosePanel;
         }
 
         public void OnDisable()
         {
-            TimerController.Instance.OnTimerEnd -= OpenLosePanel;
+            if (TimerController.Instance != null)
+                TimerController.Instance.OnTimerEnd -= OpenLosePanel;
         }
 
         public void OpenWinPanel()
