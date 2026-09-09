@@ -41,7 +41,7 @@ namespace Core.Input
 
         public void EnablePauseInput()
         {
-            Debug.Log("-- Disable Pause Action --");
+            Debug.Log("-- Enable Pause Action --");
             pauseAction.action.Enable();
         }
     }
