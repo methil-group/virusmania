@@ -52,9 +52,7 @@ The gameplay loop is simple, fast, and repetitive — intentionally designed to 
 ## Controls
 
 - **Keyboard movement**: WASD / arrow keys
-- **Main Interaction**: Left Click
-- **Grab / Drop**: E
-- **Use Machines**: E
+- **Interact / grab / drop / use machines**: E
 - **Pause**: Escape
 
 ### Gamepad
