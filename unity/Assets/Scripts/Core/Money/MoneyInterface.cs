@@ -30,10 +30,8 @@ namespace Core.Money
 
         private void UpdateMoneyText(int amount)
         {
-            Debug.Log("UpdateMoneyText called on MoneyController, amount: " + amount);
             if (MoneyController.Instance != null && moneyText != null)
             {
-                Debug.Log("UpdateMoneyText called on MoneyController, new money: " + MoneyController.Instance.money);
                 moneyText.text = MoneyController.Instance.money.ToString() + " $";
             }
         }

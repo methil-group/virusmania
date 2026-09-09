@@ -15,7 +15,6 @@ namespace Core.Money
 
         public void AddMoney(int amount)
         {
-            Debug.LogWarning("AddMoney called on MoneyController, amount: " + amount);
             money += amount;
             OnMoneyAdded?.Invoke(amount);
         }
