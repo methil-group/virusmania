@@ -51,11 +51,20 @@ The gameplay loop is simple, fast, and repetitive — intentionally designed to 
 
 ## Controls
 
-- **Movement**: AWSD
+- **Keyboard movement**: WASD / arrow keys
 - **Main Interaction**: Left Click
 - **Grab / Drop**: E
 - **Use Machines**: E
 - **Pause**: Escape
+
+### Gamepad
+
+- **Movement**: Left stick
+- **Grab / Drop / Use Machines**: Y / Triangle
+- **Pause**: Menu / Start
+- **Navigate menus**: Left stick or D-pad
+- **Validate**: A / Cross
+- **Back in menus**: B / Circle
 
 ---
 
