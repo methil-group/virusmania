@@ -24,7 +24,7 @@ namespace Core.End
         public void Start()
         {
             blackPanel.color = new Color(0, 0, 0, 0);
-            openLosePanel.gameObject.SetActive(false);
+            openWinPanel.gameObject.SetActive(false);
             openLosePanel.gameObject.SetActive(false);
             
             TimerController.Instance.OnTimerEnd += OpenLosePanel;
