@@ -15,6 +15,7 @@ namespace Core.Input
         public InputActionReference interactionHoldAction;
         
         public InputActionReference pauseAction;
+        public InputActionReference cancelAction;
 
         public void DisableMovementInputs()
         {

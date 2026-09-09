@@ -16,3 +16,4 @@ MonoBehaviour:
   interactionAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactionHoldAction: {fileID: -9041382681871478144, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   pauseAction: {fileID: 8872936256491890210, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  cancelAction: {fileID: 7727032971491509709, guid: 052faaac586de48259a63d0c4782560b, type: 3}

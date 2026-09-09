@@ -2,6 +2,7 @@ using System;
 using Core.Input;
 using Framework.Controller;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Core.MainMenu
@@ -21,8 +22,17 @@ namespace Core.MainMenu
 
         [SerializeField] private ButtonWithPanel[] buttonWithPanel;
 
+        private InputAction _cancelAction;
+
         void Start()
         {
+            _cancelAction = InputDatabase.Instance?.cancelAction?.action;
+            if (_cancelAction != null)
+            {
+                _cancelAction.performed += OnCancelPerformed;
+                _cancelAction.Enable();
+            }
+
             foreach (var b in buttonWithPanel)
             {
                 var targetPanel = b.panel;
@@ -35,6 +45,21 @@ namespace Core.MainMenu
                 b.panel.gameObject.SetActive(false);
             }
             buttonWithPanel[0].panel.gameObject.SetActive(true);
+        }
+
+        private void OnDestroy()
+        {
+            if (_cancelAction != null)
+                _cancelAction.performed -= OnCancelPerformed;
+        }
+
+        private void OnCancelPerformed(InputAction.CallbackContext context)
+        {
+            if (!(context.control.device is Gamepad) || optionPanel == null)
+                return;
+
+            if (optionPanel.gameObject.activeSelf)
+                CloseOption();
         }
 
         void Init()
