@@ -14,7 +14,7 @@ namespace Core.Computer
         public override void Start()
         {
             if (InputDatabase.Instance == null)
-                Debug.LogError("Input Database is null, or cannot be finded, it will give some errors...");
+                Debug.LogError("Input Database is null and will cause errors.");
             
             base.Start();
 
