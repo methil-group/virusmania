@@ -46,6 +46,7 @@ namespace Core.OnBoarding
         private List<Outline> _currentActiveOutlines = new List<Outline>();
         private Dictionary<Outline, float> _baseWidths = new Dictionary<Outline, float>();
         private Dictionary<Outline, Color> _originalColors = new Dictionary<Outline, Color>();
+        private bool _eventsRegistered;
 
         private void Pop(GameObject[] objects)
         {
@@ -141,73 +142,86 @@ namespace Core.OnBoarding
             
             OnBoardingInterface.Instance.ShowActualBoard();
 
-            recipeListInteractable.OnInteractRecipeList += () =>
+            recipeListInteractable.OnInteractRecipeList += OnRecipeListInteracted;
+            sendItemInteractable.onItemSent += OnItemSent;
+            brewInteractable.onItemMerged += OnItemMerged;
+            cookInteractable.onItemCooked += OnItemCooked;
+            pathoNetInterface.OnBuyItem += OnItemBought;
+            _eventsRegistered = true;
+        }
+
+        public void OnDestroy()
+        {
+            if (!_eventsRegistered)
+                return;
+
+            recipeListInteractable.OnInteractRecipeList -= OnRecipeListInteracted;
+            sendItemInteractable.onItemSent -= OnItemSent;
+            brewInteractable.onItemMerged -= OnItemMerged;
+            cookInteractable.onItemCooked -= OnItemCooked;
+            pathoNetInterface.OnBuyItem -= OnItemBought;
+        }
+
+        private void OnRecipeListInteracted()
+        {
+            var boardingData = GetActualOnBoarding();
+            if (boardingData.onBoardingState != OnBoardingState.OpenLibrary)
+                return;
+
+            Pop(new GameObject[] { computerObject, cartObject });
+            GoNextOnBoarding();
+        }
+
+        private void OnItemSent(Core.Item.Item item)
+        {
+            var boardingData = GetActualOnBoarding();
+            if (boardingData.onBoardingState == OnBoardingState.SendItem &&
+                item == OnBoardingDatabase.Instance.itemToSent)
             {
-                var boardingData = GetActualOnBoarding();
-                if (boardingData.onBoardingState == OnBoardingState.OpenLibrary)
-                {
-                    Pop(new GameObject[] { computerObject, cartObject });
-                    GoNextOnBoarding();
-                }
-            };
+                GoNextOnBoarding();
+            }
+        }
 
-            sendItemInteractable.onItemSent += item =>
+        private void OnItemMerged(Core.Item.Item item)
+        {
+            var boardingData = GetActualOnBoarding();
+            if (boardingData.onBoardingState == OnBoardingState.MergeItems &&
+                item == OnBoardingDatabase.Instance.itemToMerge)
             {
-                var boardingData = GetActualOnBoarding();
-                if (boardingData.onBoardingState == OnBoardingState.SendItem)
-                {
-                    if (item == OnBoardingDatabase.Instance.itemToSent)
-                        GoNextOnBoarding();
-                }
-            };
+                Pop(new GameObject[] { sendItemInteractableObject });
+                GoNextOnBoarding();
+            }
+        }
 
-            brewInteractable.onItemMerged += item =>
+        private void OnItemCooked(Core.Item.Item item)
+        {
+            var boardingData = GetActualOnBoarding();
+            if (boardingData.onBoardingState == OnBoardingState.CookItem &&
+                item == OnBoardingDatabase.Instance.itemToCook)
             {
-                var boardingData = GetActualOnBoarding();
-                if (boardingData.onBoardingState == OnBoardingState.MergeItems)
-                {
-                    if (item == OnBoardingDatabase.Instance.itemToMerge)
-                    {
-                        Pop(new GameObject[] { sendItemInteractableObject });
-                        GoNextOnBoarding();
-                    }
-                }
-            };
+                Pop(new GameObject[] { brewInteractableObject });
+                GoNextOnBoarding();
+            }
+        }
 
-            cookInteractable.onItemCooked += item =>
+        private void OnItemBought(Core.Item.Item item)
+        {
+            var boardingData = GetActualOnBoarding();
+            if (boardingData.onBoardingState != OnBoardingState.BuyItems ||
+                (_itemToBuy1Count == 1 && _itemToBuy2Count == 1))
+                return;
+
+            if (item == OnBoardingDatabase.Instance.itemToBuy1)
+                _itemToBuy1Count++;
+
+            if (item == OnBoardingDatabase.Instance.itemToBuy2)
+                _itemToBuy2Count++;
+
+            if (_itemToBuy1Count == 1 && _itemToBuy2Count == 1)
             {
-                var boardingData = GetActualOnBoarding();
-                if (boardingData.onBoardingState == OnBoardingState.CookItem)
-                {
-                    if (item == OnBoardingDatabase.Instance.itemToCook)
-                    {
-                        Pop(new GameObject[] { brewInteractableObject });
-                        GoNextOnBoarding();
-                    }
-                }
-            };
-
-            pathoNetInterface.OnBuyItem += item =>
-            {
-                var boardingData = GetActualOnBoarding();
-                if (boardingData.onBoardingState == OnBoardingState.BuyItems)
-                {
-                    if (_itemToBuy1Count == 1 && _itemToBuy2Count == 1)
-                        return;
-
-                    if (item == OnBoardingDatabase.Instance.itemToBuy1)
-                        _itemToBuy1Count++;
-
-                    if (item == OnBoardingDatabase.Instance.itemToBuy2)
-                        _itemToBuy2Count++;
-
-                    if (_itemToBuy1Count == 1 && _itemToBuy2Count == 1)
-                    {
-                        GoNextOnBoarding();
-                        Pop(new GameObject[] { cookInteractableObject });
-                    }
-                }
-            };
+                GoNextOnBoarding();
+                Pop(new GameObject[] { cookInteractableObject });
+            }
         }
 
         public void GoNextOnBoarding()
