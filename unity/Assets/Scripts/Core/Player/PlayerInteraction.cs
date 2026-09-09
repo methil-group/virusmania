@@ -15,6 +15,9 @@ namespace Core.Player
     public class PlayerInteraction : Updatable<PlayerController>
     {
         private PlayerMovement _playerMovement;
+        private PlayerController _playerController;
+        private InputAction _interactionInput;
+        private InputAction _interactionHoldInput;
 
         [Header("Interaction Settings")]
         [SerializeField] private float interactionDistance = 2f;
@@ -44,17 +47,52 @@ namespace Core.Player
 
         public override void Start(PlayerController controller)
         {
+            _playerController = controller;
             _playerMovement = controller.updatables.FirstOfType<PlayerMovement>();
 
             if (interactionAction == null || interactionHoldAction == null)
                 return;
 
-            interactionAction.action.performed += ctx => Interact(controller);
-            interactionAction.action.Enable();
+            _interactionInput = interactionAction.action;
+            _interactionHoldInput = interactionHoldAction.action;
 
-            interactionHoldAction.action.performed += ctx => _isInteractingHeld = true;
-            interactionHoldAction.action.canceled += ctx => _isInteractingHeld = false;
-            interactionHoldAction.action.Enable();
+            _interactionInput.performed += OnInteractionPerformed;
+            _interactionInput.Enable();
+
+            _interactionHoldInput.performed += OnInteractionHoldPerformed;
+            _interactionHoldInput.canceled += OnInteractionHoldCanceled;
+            _interactionHoldInput.Enable();
+        }
+
+        public override void OnDestroy(PlayerController controller)
+        {
+            if (_interactionInput != null)
+                _interactionInput.performed -= OnInteractionPerformed;
+
+            if (_interactionHoldInput != null)
+            {
+                _interactionHoldInput.performed -= OnInteractionHoldPerformed;
+                _interactionHoldInput.canceled -= OnInteractionHoldCanceled;
+            }
+
+            _isInteractingHeld = false;
+            _playerController = null;
+        }
+
+        private void OnInteractionPerformed(InputAction.CallbackContext context)
+        {
+            if (_playerController != null)
+                Interact(_playerController);
+        }
+
+        private void OnInteractionHoldPerformed(InputAction.CallbackContext context)
+        {
+            _isInteractingHeld = true;
+        }
+
+        private void OnInteractionHoldCanceled(InputAction.CallbackContext context)
+        {
+            _isInteractingHeld = false;
         }
 
         public override void Update(PlayerController controller)
