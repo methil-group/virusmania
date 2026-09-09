@@ -15,19 +15,30 @@ namespace Core.Item
         public Image holdItemImage;
         public TextMeshProUGUI holdItemName;
 
+        private PlayerInteraction _playerInteraction;
+
         public void Start()
         {
-            var playerInteraction = PlayerController.Instance.updatables.FirstOfType<PlayerInteraction>();
-            playerInteraction.OnItemAdded += UpdateInterface;
-            playerInteraction.OnItemRemoved += HideInterface;
+            if (PlayerController.Instance == null)
+                return;
+
+            _playerInteraction = PlayerController.Instance.updatables.FirstOfType<PlayerInteraction>();
+            if (_playerInteraction == null)
+                return;
+
+            _playerInteraction.OnItemAdded += UpdateInterface;
+            _playerInteraction.OnItemRemoved += HideInterface;
             itemHoldInterface.gameObject.SetActive(false);
         }
 
         public void OnDisable()
         {
-            var playerInteraction = PlayerController.Instance.updatables.FirstOfType<PlayerInteraction>();
-            playerInteraction.OnItemAdded -= UpdateInterface;
-            playerInteraction.OnItemRemoved -= HideInterface;
+            if (_playerInteraction == null)
+                return;
+
+            _playerInteraction.OnItemAdded -= UpdateInterface;
+            _playerInteraction.OnItemRemoved -= HideInterface;
+            _playerInteraction = null;
         }
 
         private void HideInterface(HoldItem holdItem)
