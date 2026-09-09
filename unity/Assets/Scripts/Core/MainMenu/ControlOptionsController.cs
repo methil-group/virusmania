@@ -43,8 +43,7 @@ namespace Core.MainMenu
                     foreach (var b in binding.bindings)
                         SaveBinding(b.action.action);
 
-                    foreach (var b in binding.bindings)
-                        UpdateLabel(binding);
+                    UpdateLabel(binding);
 
                 }).Start();
         }
@@ -65,6 +64,7 @@ namespace Core.MainMenu
         {
             var json = action.SaveBindingOverridesAsJson();
             PlayerPrefs.SetString(action.name, json);
+            PlayerPrefs.Save();
         }
 
         void OnEnable()
