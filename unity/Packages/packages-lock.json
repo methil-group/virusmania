@@ -9,23 +9,23 @@
       }
     },
     "com.coffee.ui-effect": {
-      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
+      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src#5.11.5",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "ef7ac0aaad7e8d60415e9348c9d84b32cc3a6437"
+      "hash": "1f4427c3d5d249534dba69d8c53acafb5d5fbd7f"
     },
     "com.coffee.ui-particle": {
-      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git",
+      "version": "https://github.com/mob-sakai/ParticleEffectForUGUI.git#4.13.3",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
-      "hash": "c54f63cb18a22382215b142b63e232f0f86fff58"
+      "hash": "5a305705f84549e50223d897bb95495edd78bf1a"
     },
     "com.deltation.toon-shader": {
       "version": "https://github.com/Delt06/urp-toon-shader.git?path=Packages/com.deltation.toon-shader",
@@ -37,11 +37,11 @@
       "hash": "6981f7dc931b53a0bd797725f4dac30b824041d7"
     },
     "com.mackysoft.serializereference-extensions": {
-      "version": "https://github.com/mackysoft/Unity-SerializeReferenceExtensions.git?path=Assets/MackySoft/MackySoft.SerializeReferenceExtensions#1.1.9",
+      "version": "https://github.com/mackysoft/Unity-SerializeReferenceExtensions.git?path=Assets/MackySoft/MackySoft.SerializeReferenceExtensions#1.7.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "cdcbbedf21f4ccfc8108a2c893ad073e02c9ff62"
+      "hash": "1d388a4bba9235dfca394830ca186bb477e90901"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
