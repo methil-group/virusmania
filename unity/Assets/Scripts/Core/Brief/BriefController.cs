@@ -48,6 +48,8 @@ namespace Core.Brief
 
         public bool CanCompleteBrief(HoldItem itemToValidate)
         {
+            if (itemToValidate?.Item == null) return false;
+
             if (actualBrief != null && actualBrief.wantedItem == itemToValidate.Item)
             {
                 return true;
@@ -60,6 +62,8 @@ namespace Core.Brief
         
         public bool TryToCompleteBrief(HoldItem itemToValidate)
         {
+            if (itemToValidate?.Item == null) return false;
+
             if (actualBrief != null && actualBrief.wantedItem == itemToValidate.Item)
             {
                 MoneyController.Instance.AddMoney(actualBrief.moneyGiven);

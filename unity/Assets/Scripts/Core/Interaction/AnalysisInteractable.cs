@@ -92,9 +92,11 @@ namespace Core.Interaction
             PlayerInteraction playerInteraction = playerController.updatables.FirstOfType<PlayerInteraction>();
             if (playerInteraction == null) return false;
 
+            if (HoldingItems.Count >= maxHoldableItems) return false;
+
             if (playerInteraction.HasItem)
             {
-                if (playerInteraction.HoldingItem.Item is VirusItem virusItem)
+                if (playerInteraction.HoldingItem.Item is VirusItem)
                 {
                     return true;
                 }

@@ -50,17 +50,27 @@ namespace Core.Interaction
         public void SendItem()
         {
             if (_isSendingItem) return;
-            
-            _isSendingItem = true;
+
             HoldItem holdItem = HoldingItems.Count > 0 ? HoldingItems.First() : null;
+            if (holdItem?.Item == null)
+            {
+                Debug.LogWarning("Cannot send an empty item.");
+                return;
+            }
+
+            if (spawnedPrefabs.Count == 0 || spawnedPrefabs.First() == null)
+            {
+                Debug.LogError($"Cannot send {holdItem.Item.itemName}: its item prefab is missing.");
+                return;
+            }
+
+            _isSendingItem = true;
             threadMillAnimator.SetBool("Roll", true);
             LeanTween.delayedCall(2.084f, () =>
             {
                 _isSendingItem = false;
                 threadMillAnimator.SetBool("Roll", false);
             });
-
-            if (holdItem == null) return;
 
             LeanTween.moveLocalX(spawnedPrefabs.First(), objectDestination.x, 1.6f).setOnComplete(() =>
             {

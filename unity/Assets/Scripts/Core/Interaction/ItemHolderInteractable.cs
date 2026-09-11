@@ -20,6 +20,7 @@ namespace Core.Interaction
         public UnityAction<HoldItem> OnItemRemoved;
         public UnityAction OnItemsChanged;
 
+        [NonSerialized]
         public List<HoldItem> HoldingItems = new List<HoldItem>();
         protected List<GameObject> spawnedPrefabs = new List<GameObject>();
 

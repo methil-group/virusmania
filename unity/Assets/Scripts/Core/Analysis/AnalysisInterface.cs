@@ -21,6 +21,12 @@ namespace Core.Analysis
         
         public void ShowAnalysis(HoldItem holdItemAnalyzed)
         {
+            if (holdItemAnalyzed?.Item == null)
+            {
+                Debug.LogWarning("Cannot show analysis for an empty item.");
+                return;
+            }
+
             _holdItem = holdItemAnalyzed;
             diseaseNameText.text = holdItemAnalyzed.Item.itemName;
             foreach (Transform child in diseaseThreatContainer)
@@ -30,9 +36,15 @@ namespace Core.Analysis
 
             if (holdItemAnalyzed is HoldVirusItem holdVirusItem && holdVirusItem.Item is VirusItem holdVirusItemData)
             {
-                List<ThreatParameter> threatImpacts = holdVirusItemData.threatParameters.ToList();
+                IEnumerable<ThreatParameter> threatImpacts = holdVirusItemData.threatParameters ?? Enumerable.Empty<ThreatParameter>();
                 foreach (var impact in threatImpacts)
                 {
+                    if (impact?.threatType == null || impact.threatType.threatTypeIcon == null)
+                    {
+                        Debug.LogWarning($"Ignoring incomplete threat data on {holdVirusItemData.itemName}.");
+                        continue;
+                    }
+
                     var threatPrefab = Instantiate(PrefabDatabase.Instance.analysisThreatPrefab, diseaseThreatContainer);
                     threatPrefab.GetComponent<ThreatOfDiseasePrefab>().Setup(impact.threatType.threatTypeIcon, impact.threatImpact);
                 }
