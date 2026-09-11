@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Mutagenesis
   itemDescription: 
   itemPrefab: {fileID: 6584508006877052939, guid: d8bdebfef4baa4f8c8274e9de35a6402, type: 3}
-  itemIcon: {fileID: 21300000, guid: d7e0e31ae61e14f07aa9369cb139029a, type: 3}
+  itemIcon: {fileID: 21300000, guid: 0d86720861a11df4abb6a226d1bd9c89, type: 3}
   price: 2

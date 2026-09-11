@@ -5,6 +5,7 @@ using Core.Item.Merge;
 using Core.Input;
 using Framework.Controller;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.MergeLibrary
 {
@@ -19,11 +20,22 @@ namespace Core.MergeLibrary
         public override void Start()
         {
             base.Start();
-            
-            foreach (Transform children in mergeRecipeTransform)
-                Destroy(children.gameObject);
-            foreach (Transform children in boilingRecipeTransform)
-                Destroy(children.gameObject);
+        }
+
+        public void CreateRecipes()
+        {
+            for (int i = mergeRecipeTransform.childCount - 1; i >= 0; i--)
+            {
+                var child = mergeRecipeTransform.GetChild(i);
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
+            for (int i = boilingRecipeTransform.childCount - 1; i >= 0; i--)
+            {
+                var child = boilingRecipeTransform.GetChild(i);
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
             
             MergeDatabase mergeDatabase = MergeDatabase.Instance;
 
@@ -57,14 +69,36 @@ namespace Core.MergeLibrary
                     } , 
                     cookRecipe.resultItem
                 );
-                
             }
-            
+
+            RebuildLayouts();
+        }
+
+        public void RebuildLayouts()
+        {
+            Canvas.ForceUpdateCanvases();
+            foreach (Transform child in mergeRecipeTransform)
+            {
+                if (child is RectTransform rt)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+            }
+            foreach (Transform child in boilingRecipeTransform)
+            {
+                if (child is RectTransform rt)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(mergeRecipeTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(boilingRecipeTransform);
+            if (mergeRecipeTransform.parent is RectTransform parentRect)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(parentRect);
+            }
         }
 
         public override void OpenPanel()
         {
             base.OpenPanel();
+            CreateRecipes();
             GamepadNavigation.SelectFirstSelectable(panel);
         }
 
