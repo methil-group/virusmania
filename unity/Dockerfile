@@ -7,6 +7,7 @@ COPY . .
 RUN /opt/unity/Editor/Unity \
     -batchmode \
     -nographics \
+    -accept-apiupdate \
     -quit \
     -projectPath /project \
     -buildTarget WebGL \

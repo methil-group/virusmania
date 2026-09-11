@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -17,7 +18,12 @@ public class BuildScript
             "Assets/Scenes/Game.unity"
         };
 
-        BuildPipeline.BuildPlayer(scenes, buildPath, BuildTarget.WebGL, BuildOptions.None);
-        Debug.Log("Build WebGL terminé dans " + buildPath);
+        BuildReport report = BuildPipeline.BuildPlayer(scenes, buildPath, BuildTarget.WebGL, BuildOptions.None);
+        if (report.summary.result != BuildResult.Succeeded)
+        {
+            throw new System.Exception($"Build WebGL échoué : {report.summary.result}. Voir le rapport Unity pour plus de détails.");
+        }
+
+        Debug.Log($"Build WebGL terminé dans {buildPath} ({report.summary.totalSize} octets).");
     }
 }
