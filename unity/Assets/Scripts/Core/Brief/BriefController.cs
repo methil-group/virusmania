@@ -6,7 +6,6 @@ using Framework.Controller;
 using Framework.Extensions;
 using UnityEngine;
 
-
 namespace Core.Brief
 {
     public class BriefController : BaseController<BriefController>

@@ -39,19 +39,19 @@ Material:
     - _BorderOffsetY: -0.023
     - _BorderThickness: 0
     - _ColorMask: 15
-    - _CornerRadius: 0.047
+    - _CornerRadius: 0.075
     - _EnableBorder: 1
     - _EnableOutline: 1
     - _Frequency: 14.93
-    - _NoiseAmplitude: 0.0331
-    - _NoiseScale: 6.9
+    - _NoiseAmplitude: 0.02
+    - _NoiseScale: 8.6
     - _NoiseSpeed: 1.09
     - _OutlineEnabled: 1
     - _OutlineOffset: 0
-    - _OutlineOffsetX: 0
-    - _OutlineOffsetY: 0
-    - _OutlineSizeMultiplier: 1
-    - _OutlineThickness: 0.03
+    - _OutlineOffsetX: 0.045
+    - _OutlineOffsetY: -0.064
+    - _OutlineSizeMultiplier: 1.05
+    - _OutlineThickness: 0.018
     - _Roundness: 0.456
     - _Speed: 1.82
     - _Stencil: 0

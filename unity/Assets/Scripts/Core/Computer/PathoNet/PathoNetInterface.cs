@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Core.Item;
 using Core.Money;
+using Utils;
 using TMPro;
 using UnityEngine.Events;
 using Core.SFX;
@@ -48,7 +49,9 @@ namespace Core.Computer.PathoNet
                 if (buyableBehaviour != null)
                     buyableBehaviour.Setup(item, this, onlyOnBoarding);
             }
-            
+            if (pathoItemReceiver == null)
+                pathoItemReceiver = SceneUtils.GetComponentInActiveScene<PathoNetItemReceiver>();
+                
             buyButton.onClick.AddListener(BuyCart);
         }
 
