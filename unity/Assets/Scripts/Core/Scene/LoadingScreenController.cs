@@ -66,17 +66,16 @@ namespace Core.Scene
                 {
                     loadingSlider.material.SetFloat("_InnerFillAmount", asyncSceneToLoad.progress);
                 }
-                yield return new WaitForEndOfFrame();
+                yield return null;
             } 
             
             yield return new WaitForSecondsRealtime(0.2f);
             if (loadingSlider != null) loadingSlider.material.SetFloat("_InnerFillAmount", 1f);
             asyncSceneToLoad.allowSceneActivation = true;
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForFixedUpdate();
+            yield return asyncSceneToLoad;
 
             onEndCallback.Invoke();
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSecondsRealtime(0.2f);
 
             if (loadingTextRoutine != null) StopCoroutine(loadingTextRoutine);
             loadingText.text = "Loading...";

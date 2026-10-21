@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Framework.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,32 +19,70 @@ namespace Core.Input
         public InputActionReference pauseAction;
         public InputActionReference cancelAction;
 
+        [NonSerialized] private HashSet<UnityEngine.Object> _gameplayBlockers = new HashSet<UnityEngine.Object>();
+        [NonSerialized] private bool _legacyBlocked;
+
+        public bool GameplayBlocked
+        {
+            get
+            {
+                _gameplayBlockers.RemoveWhere(owner => owner == null);
+                return _legacyBlocked || _gameplayBlockers.Count > 0;
+            }
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void ResetSession()
+        {
+            if (Instance == null) return;
+            Instance._gameplayBlockers.Clear();
+            Instance._legacyBlocked = false;
+            Instance.RefreshGameplayInputs();
+            Instance.EnablePauseInput();
+        }
+
+        public void SetGameplayBlocked(UnityEngine.Object owner, bool blocked)
+        {
+            if (owner == null) return;
+            if (blocked) _gameplayBlockers.Add(owner);
+            else _gameplayBlockers.Remove(owner);
+            RefreshGameplayInputs();
+        }
+
+        public void RefreshGameplayInputs()
+        {
+            SetEnabled(moveAction, !GameplayBlocked);
+            SetEnabled(interactionAction, !GameplayBlocked);
+            SetEnabled(interactionHoldAction, !GameplayBlocked);
+        }
+
+        private static void SetEnabled(InputActionReference reference, bool enabled)
+        {
+            if (reference?.action == null) return;
+            if (enabled) reference.action.Enable();
+            else reference.action.Disable();
+        }
+
         public void DisableMovementInputs()
         {
-            Debug.Log("-- Disable Inputs --");
-            moveAction.action.Disable();
-            interactionAction.action.Disable();
-            interactionHoldAction.action.Disable();
+            _legacyBlocked = true;
+            RefreshGameplayInputs();
         }
 
         public void EnableMovementInputs()
         {
-            Debug.Log("-- Enable Inputs --");
-            moveAction.action.Enable();
-            interactionAction.action.Enable();
-            interactionHoldAction.action.Enable();
+            _legacyBlocked = false;
+            RefreshGameplayInputs();
         }
 
         public void DisablePauseInput()
         {
-            Debug.Log("-- Disable Pause Action --");
-            pauseAction.action.Disable();
+            SetEnabled(pauseAction, false);
         }
 
         public void EnablePauseInput()
         {
-            Debug.Log("-- Enable Pause Action --");
-            pauseAction.action.Enable();
+            SetEnabled(pauseAction, true);
         }
     }
 }

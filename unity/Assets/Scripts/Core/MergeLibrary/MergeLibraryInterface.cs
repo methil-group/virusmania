@@ -97,9 +97,30 @@ namespace Core.MergeLibrary
 
         public override void OpenPanel()
         {
+            if (!CanOpen() || panel == null) return;
             base.OpenPanel();
             CreateRecipes();
+            Canvas.ForceUpdateCanvases();
+            var scroll = panel.GetComponent<ScrollRect>();
+            if (scroll != null)
+            {
+                scroll.StopMovement();
+                scroll.content.anchoredPosition = Vector2.zero;
+                scroll.verticalNormalizedPosition = 1f;
+            }
             GamepadNavigation.SelectFirstSelectable(panel);
+        }
+
+        protected override void OnOpeningFinished()
+        {
+            // ScrollRect computes bounds in world space; wait until the opening scale is final.
+            RebuildLayouts();
+            Canvas.ForceUpdateCanvases();
+            var scroll = panel.GetComponent<ScrollRect>();
+            if (scroll == null) return;
+            scroll.StopMovement();
+            scroll.content.anchoredPosition = Vector2.zero;
+            scroll.verticalNormalizedPosition = 1f;
         }
 
         public override void ClosePanel()

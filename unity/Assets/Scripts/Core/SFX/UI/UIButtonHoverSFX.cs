@@ -20,7 +20,8 @@ namespace Core.SFX.UI
 
         public void OnDisable()
         {
-            shadow.effectDistance = originalDistance;
+            LeanTween.cancel(gameObject, false);
+            if (shadow) shadow.effectDistance = originalDistance;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -32,6 +33,7 @@ namespace Core.SFX.UI
                 LeanTween.cancel(gameObject, false);
                 tween = LeanTween.value(gameObject, shadow.effectDistance, Vector2.zero, 0.15f)
                     .setEaseOutQuad()
+                    .setIgnoreTimeScale(true)
                     .setOnUpdate((Vector2 v) => shadow.effectDistance = v);
             }
         }
@@ -43,6 +45,7 @@ namespace Core.SFX.UI
                 LeanTween.cancel(gameObject, false);
                 tween = LeanTween.value(gameObject, shadow.effectDistance, originalDistance, 0.2f)
                     .setEaseOutQuad()
+                    .setIgnoreTimeScale(true)
                     .setOnUpdate((Vector2 v) => shadow.effectDistance = v);
             }
         }

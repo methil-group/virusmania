@@ -8,6 +8,11 @@ namespace Core.Interaction
     {
         [SerializeField] private Animator sendItemButtonAnimator;
         [SerializeField] private SendItemInteractable sendItemInteractable;
+
+        public override bool CanInteract(PlayerController playerController)
+            => sendItemInteractable != null && sendItemInteractable.CanSendItem;
+
+        public override string GetInteractionHint(PlayerController playerController) => "Send sample";
         
         public override void Interact(PlayerController playerController)
         {

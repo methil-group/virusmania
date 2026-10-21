@@ -10,3 +10,12 @@ to spend on the gameplay loop, actions and diversity.
 You can find all the details about the gameplay in on the decated xref:./gameplay/index.adoc[Gameplay section]
 of this documentation.
 
+== Validation
+
+La xref:./gameplay/validation.adoc[procédure de validation] décrit les tests PlayMode,
+la construction de la version Windows de développement et le parcours de vérification manuelle.
+
+La xref:./gameplay/visual-review/rapport.adoc[revue visuelle] rassemble les captures d'écran,
+le schéma de la boucle de gameplay et les améliorations de lisibilité à poursuivre.
+Ouvrir link:./gameplay/visual-review/index.html[la galerie interactive hors ligne] pour les parcourir.
+

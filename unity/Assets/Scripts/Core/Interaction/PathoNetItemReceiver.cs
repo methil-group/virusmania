@@ -12,6 +12,14 @@ namespace Core.Interaction
         
         private Queue<HoldItem> itemQueue = new Queue<HoldItem>();
 
+        public override bool CanPlayerAddItem(PlayerController playerController) => false;
+
+        public override bool CanInteract(PlayerController playerController)
+        {
+            var player = playerController.updatables.FirstOfType<PlayerInteraction>();
+            return player != null && !player.HasItem && HoldingItems.Count > 0;
+        }
+
 
         public override void InInteractZone(PlayerController playerController)
         {

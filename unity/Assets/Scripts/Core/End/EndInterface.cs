@@ -15,6 +15,7 @@ namespace Core.End
         
         public RectTransform openWinPanel;
         public RectTransform openLosePanel;
+        public bool IsEnding => IsOnePanelActive();
 
         private bool IsOnePanelActive()
         {
@@ -33,6 +34,7 @@ namespace Core.End
 
         public void OnDisable()
         {
+            InputDatabase.Instance?.SetGameplayBlocked(this, false);
             if (TimerController.Instance != null)
                 TimerController.Instance.OnTimerEnd -= OpenLosePanel;
         }
@@ -40,7 +42,7 @@ namespace Core.End
         public void OpenWinPanel()
         {
             if (IsOnePanelActive()) return;
-            InputDatabase.Instance.DisableMovementInputs();
+            InputDatabase.Instance.SetGameplayBlocked(this, true);
             InputDatabase.Instance.DisablePauseInput();
             LeanTween.color(blackPanel.GetComponent<RectTransform>(), new Color(0, 0, 0, 0.6f), 0.6f)
                 .setEaseOutCirc();;
@@ -58,7 +60,7 @@ namespace Core.End
         public void OpenLosePanel()
         {
             if (IsOnePanelActive()) return;
-            InputDatabase.Instance.DisableMovementInputs();
+            InputDatabase.Instance.SetGameplayBlocked(this, true);
             InputDatabase.Instance.DisablePauseInput();
             LeanTween.color(blackPanel.GetComponent<RectTransform>(), new Color(0, 0, 0, 0.6f), 0.6f)
                 .setEaseOutCirc();;
@@ -75,7 +77,7 @@ namespace Core.End
 
         public void ReturnToMainMenu()
         {
-            InputDatabase.Instance.EnableMovementInputs();
+            InputDatabase.Instance.SetGameplayBlocked(this, false);
             InputDatabase.Instance.EnablePauseInput();
             var scene = SceneDatabase.Instance.GetSceneByName("MainMenu");
             SceneTransitor.Instance.LoadScene(scene);

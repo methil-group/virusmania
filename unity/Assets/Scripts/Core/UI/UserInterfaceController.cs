@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Core.Computer;
+using Core.Analysis;
+using Core.End;
 using Core.Input;
 using Core.MergeLibrary;
 using Core.Pause;
@@ -24,6 +26,8 @@ namespace Core.UI
                 interfaces.Add(ComputerInterface.Instance);
             if (MergeLibraryInterface.Instance != null)
                 interfaces.Add(MergeLibraryInterface.Instance);
+            if (AnalysisInterface.Instance != null)
+                interfaces.Add(AnalysisInterface.Instance);
 
             _pauseAction = InputDatabase.Instance?.pauseAction?.action;
             if (_pauseAction != null)
@@ -64,20 +68,29 @@ namespace Core.UI
         {
             if (!(context.control.device is Gamepad))
                 return;
+            if (EndInterface.Instance != null && EndInterface.Instance.IsEnding) return;
+
+            if (PauseMenu.Instance != null && PauseMenu.Instance.IsOpen)
+            {
+                PauseMenu.Instance.ClosePanel();
+                return;
+            }
 
             var openedInterface = GetOpenedInterface();
             if (openedInterface != null)
             {
                 openedInterface.ClosePanel();
             }
-            else if (PauseMenu.Instance != null && PauseMenu.Instance.IsOpen)
-            {
-                PauseMenu.Instance.ClosePanel();
-            }
         }
 
         public void CallPauseMenu()
         {
+            if (EndInterface.Instance != null && EndInterface.Instance.IsEnding) return;
+            if (PauseMenu.Instance != null && PauseMenu.Instance.IsOpen)
+            {
+                PauseMenu.Instance.ClosePanel();
+                return;
+            }
             var openedInterface = GetOpenedInterface();
 
             if (openedInterface != null)

@@ -1,6 +1,8 @@
 using System;
 using Core.Player;
 using Core.Prefab;
+using Core.Input;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +11,8 @@ namespace Core.Interaction
     public abstract class Interactable : MonoBehaviour
     {
         private GameObject _interactionIndicator;
+        private bool _indicatorVisible;
+        private TMP_Text _indicatorLabel;
 
         public UnityAction InInteraction;
         public UnityAction OutInteraction;
@@ -18,7 +22,7 @@ namespace Core.Interaction
 
         public virtual void Awake()
         {
-            if (PrefabDatabase.Instance.interactionIndicationPrefab != null)
+            if (PrefabDatabase.Instance != null && PrefabDatabase.Instance.interactionIndicationPrefab != null)
             {
                 Transform parentToAttach = transform.parent != null ? transform.parent : null;
 
@@ -33,6 +37,7 @@ namespace Core.Interaction
                 _interactionIndicator.transform.rotation = Quaternion.identity;
                 _interactionIndicator.transform.localScale = Vector3.zero;
                 _interactionIndicator.SetActive(false);
+                _indicatorLabel = _interactionIndicator.GetComponentInChildren<TMP_Text>(true);
             }
         }
 
@@ -42,6 +47,15 @@ namespace Core.Interaction
 
         public virtual void InInteractZone(PlayerController playerController)
         {
+            if (_indicatorLabel != null && InputDatabase.Instance != null)
+            {
+                var action = string.IsNullOrEmpty(GetInteractionHint(playerController))
+                    ? InputDatabase.Instance.interactionHoldAction : InputDatabase.Instance.interactionAction;
+                string label = PlayerInteractionPrompt.GetBindingLabel(action);
+                if (_indicatorLabel.text != label) _indicatorLabel.text = label;
+            }
+            if (_indicatorVisible) return;
+            _indicatorVisible = true;
             InInteraction?.Invoke();
             if (_interactionIndicator != null)
             {
@@ -61,6 +75,8 @@ namespace Core.Interaction
 
         public void HideIndicator(PlayerController playerController)
         {
+            if (!_indicatorVisible) return;
+            _indicatorVisible = false;
             OutInteraction?.Invoke();
             if (_interactionIndicator != null && _interactionIndicator.activeSelf)
             {
@@ -76,6 +92,14 @@ namespace Core.Interaction
         public virtual bool CanInteract(PlayerController playerController)
         {
             return true;
+        }
+
+        public virtual string GetInteractionHint(PlayerController playerController) => "Use";
+        public virtual string GetHoldInteractionHint(PlayerController playerController) => string.Empty;
+
+        protected virtual void OnDestroy()
+        {
+            if (_interactionIndicator != null) Destroy(_interactionIndicator);
         }
 
         public abstract void Interact(PlayerController playerController);

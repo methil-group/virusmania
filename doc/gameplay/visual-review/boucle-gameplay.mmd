@@ -1,0 +1,38 @@
+flowchart TD
+    Splash[Animation de démarrage] --> Menu[Menu principal]
+    Menu --> Options[Audio et commandes]
+    Options --> Menu
+    Menu --> Choix{Tutoriel ?}
+    Choix -->|Oui| T1[Consulter les recettes]
+    T1 --> T2[Acheter Nanoclostre et Microhaemo]
+    T2 --> T3[Cuire Nanoclostre en Nanoclostrum reducta]
+    T3 --> T4[Fusionner avec Microhaemo : Parvovirus B19]
+    T4 --> T5[Expédier le virus]
+    T5 --> Brief
+    Choix -->|Passer| Brief[Lire et accepter le brief]
+    Brief --> Timer[Chrono : 120 secondes]
+    Brief --> Recette[Consulter la recette demandée]
+    Recette --> Achat[Acheter les ingrédients avec le budget]
+    Achat --> Chariot[Récupérer la livraison au chariot]
+    Chariot --> Cuisson{Une cuisson est nécessaire ?}
+    Cuisson -->|Oui| BainMarie[Bain-marie : 8 secondes]
+    BainMarie --> Preparation
+    Cuisson -->|Non| Preparation[Déposer les ingrédients au poste de fusion]
+    Preparation --> Fusion[Maintenir l'interaction : 5 secondes]
+    Fusion --> Analyse{Analyser le virus ?}
+    Analyse -->|Oui| Microscope[Microscope : maintien 2 secondes]
+    Microscope --> Envoi
+    Analyse -->|Non| Envoi[Déposer le virus sur le tapis et actionner le levier]
+    Envoi --> Validation{Virus demandé ?}
+    Validation -->|Non| Erreur[Voyant rouge : échantillon perdu, chrono toujours actif]
+    Erreur --> Achat
+    Validation -->|Oui| Recompense[Voyant vert : arrêter le chrono et payer la récompense]
+    Recompense --> Termine{Les 3 briefs sont terminés ?}
+    Termine -->|Non| Brief
+    Termine -->|Oui| Victoire[Écran de victoire]
+    Timer -->|Temps écoulé| Defaite[Écran de défaite]
+    Victoire --> Menu
+    Defaite --> Menu
+    Pause[Pause : temps figé, Reprendre / Options / Menu]
+    Pause -. Reprendre la partie .-> Preparation
+    Note[Les fenêtres boutique, recettes et analyse ne figent pas le chrono.]

@@ -417,6 +417,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -491,14 +492,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745924050}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -543,7 +544,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -1720,6 +1721,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2165377008361930946, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2204681213429948083, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1746,7 +1751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_AnchorMin.y
@@ -1754,7 +1759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1463.2771
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1790,7 +1795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 525.1
+      value: -32
       objectReference: {fileID: 0}
     - target: {fileID: 2831580314187695029, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1891,6 +1896,18 @@ PrefabInstance:
     - target: {fileID: 5827637125751541651, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8209976277886922148, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8209976277886922148, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8209976277886922148, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -48
       objectReference: {fileID: 0}
     - target: {fileID: 8315601980869238961, guid: f29fc3f193be84019860fbb12cc843d7, type: 3}
       propertyPath: m_AnchorMax.y

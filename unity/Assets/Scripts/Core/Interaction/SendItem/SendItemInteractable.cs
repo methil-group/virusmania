@@ -22,6 +22,10 @@ namespace Core.Interaction
 
         [SerializeField] private bool isOnBoarding = false;
         private bool _isSendingItem = false;
+        public bool CanSendItem => !_isSendingItem && HoldingItems.Count > 0;
+
+        public override bool CanInteract(PlayerController playerController)
+            => !_isSendingItem && base.CanInteract(playerController);
 
         public override void Start()
         {

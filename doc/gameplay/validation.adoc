@@ -1,0 +1,76 @@
+= Validation de la première passe de gameplay
+
+Cette passe conserve les recettes, les prix et la direction artistique existants.
+Elle améliore le ciblage, les commandes, les fenêtres et la récupération des erreurs du tutoriel.
+
+== Résultat de la validation du 20 octobre 2026
+
+Compilation sous Unity 6000.6.6f1 : aucune erreur de compilation.
+Les 12 tests PlayMode ont réussi, y compris le parcours complet du tutoriel
+avec perte et récupération du virus final avant l'arrivée dans Game.
+Le rapport NUnit est conservé localement dans `unity/Logs/gameplay-results.xml`.
+Les tests ont été exécutés dans une copie temporaire des sources de la branche `dev`.
+L'indication d'action a également été contrôlée visuellement dans l'éditeur en 1280 × 720.
+Le build Windows de développement a réussi sans erreur et son démarrage jusqu'au menu
+principal a été vérifié dans l'exécutable. Le dossier complet représente environ 1,38 Gio.
+Ce build contient encore 8 avertissements d'import, de shaders et de configuration Pipeline ;
+le rapport détaillé est conservé dans `unity/Logs/dev-build-report.json`.
+
+La revue visuelle suivante et la correction du microscope ont porté la suite à
+21 tests PlayMode réussis, zéro échec, dans l'Éditeur sur les sources courantes de `dev` (37,67 s).
+Les nouveaux tests vérifient la place des textes de chaque brief et étape du tutoriel,
+les références stencil des contours et les états du rapport d'analyse : identification,
+changement de virus, mesures absentes ou renseignées, icône absente, fermeture et colonnes.
+Le xref:./visual-review/rapport.adoc[compte rendu visuel] et
+link:./visual-review/tests-playmode.json[le rapport des 21 tests] documentent cette passe.
+Le build Windows cité ci-dessus précède ces nouvelles mises en page.
+
+== Lancer les tests
+
+Ouvrir le dossier `unity/` avec Unity 6000.6.6f1, puis ouvrir
+`Window > General > Test Runner` et lancer l'assemblée `VirusMania.PlayModeTests`
+dans l'onglet PlayMode.
+
+Les tests chargent les vraies scènes et exécutent les composants du jeu.
+Ils couvrent les verrous de commandes superposés, la fermeture des fenêtres,
+la pause sur un brief, l'acceptation répétée d'un brief, les rebinds,
+la récupération des objets du tutoriel, le ciblage et les liquides en pause.
+Un scénario parcourt également achat, cuisson, mélange et expédition après
+la perte puis la récupération du produit final.
+
+Pour une exécution séparée de l'éditeur, fermer d'abord le projet dans Unity
+après avoir sauvegardé le travail en cours, puis exécuter depuis la racine du dépôt :
+
+[source,powershell]
+----
+unity test ./unity --mode PlayMode --filter VirusMania.Tests --output ./unity/Logs/gameplay-results.xml --timeout 600 --format json
+----
+
+== Construire une version jouable
+
+Dans Unity, utiliser `VirusMania > Build Windows Preview`.
+Le résultat se trouve dans `unity/Build/Dev/VirusMania.exe`.
+Distribuer tout le dossier `Dev`, et pas uniquement l'exécutable.
+Le dossier de build est ignoré par Git.
+
+== Vérification manuelle
+
+. Partir de SplashScreen et rejoindre le tutoriel.
+. Approcher deux machines : une seule indication doit désigner l'action exécutée.
+. Vérifier que l'indication affiche les commandes clavier et manette adaptées.
+. Ouvrir la bibliothèque : déplacement et interactions doivent être bloqués.
+. Fermer avec Échap, Start ou Retour à la manette : les commandes reviennent après l'animation.
+. Modifier E en F dans les options : prise/dépose et maintien utilisent F.
+. Annuler un autre rebind par Échap : l'ancienne touche et son libellé sont conservés.
+. Jeter un ingrédient du tutoriel : il revient dans le chariot sans nouveau paiement.
+. Cuire le mauvais ingrédient : l'ingrédient consommé revient dans le chariot.
+. Envoyer un mauvais échantillon : l'objet utile est remplacé dans le chariot.
+. Terminer le tutoriel et vérifier l'arrivée dans Game.
+. Mettre en pause pendant l'affichage d'un brief, puis reprendre : le brief bloque toujours les actions.
+. Accepter rapidement deux fois le brief : une seule mission démarre.
+. Ouvrir l'analyse puis utiliser Échap ou Retour : l'analyse se ferme sans ouvrir la pause.
+. Mettre en pause avec une fiole visible puis reprendre : le liquide reste correctement affiché.
+
+La validation automatique établit le comportement des systèmes.
+Le rythme, la lisibilité à différentes résolutions et le confort avec une vraie manette
+restent à apprécier pendant une partie jouée.

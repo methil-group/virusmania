@@ -29,6 +29,8 @@ namespace Core.Interaction
         private bool isSliderVisible = false;
 
         public UnityAction<Item.Item> onItemMerged;
+        private Item.Item[] _mergeInputs = System.Array.Empty<Item.Item>();
+        private bool CanMergeItems => _mergeInputs.Length >= 2 && MergeUtils.CanMerge(_mergeInputs);
 
         public override void Start()
         {
@@ -40,6 +42,7 @@ namespace Core.Interaction
 
             OnItemAdded += (_ => OnItemChanged());
             OnItemRemoved += (_ => OnItemChanged());
+            OnItemChanged();
 
             holdInteractImage.rectTransform.localScale = Vector2.zero;
         }
@@ -95,8 +98,7 @@ namespace Core.Interaction
 
         public override void InteractHold(PlayerController playerController)
         {
-            Item.Item[] items = HoldingItems.ConvertAll(h => h.Item).ToArray();
-            if (!MergeUtils.CanMerge(items)) return;
+            if (!CanMergeItems) return;
 
             if (!isBeingHeld)
                 StartMixingSound();
@@ -173,6 +175,16 @@ namespace Core.Interaction
         private void OnItemChanged()
         {
             holdTimer = 0f;
+            _mergeInputs = HoldingItems.ConvertAll(h => h.Item).ToArray();
         }
+
+        public override bool CanInteract(PlayerController playerController)
+            => base.CanInteract(playerController) || CanMergeItems;
+
+        public override string GetInteractionHint(PlayerController playerController)
+            => base.CanInteract(playerController) ? base.GetInteractionHint(playerController) : string.Empty;
+
+        public override string GetHoldInteractionHint(PlayerController playerController)
+            => CanMergeItems ? "Mix" : string.Empty;
     }
 }

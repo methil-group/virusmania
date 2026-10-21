@@ -14,6 +14,11 @@ namespace Core.Interaction
         private AudioSource audioSource;
 
         public UnityAction<Item.Item> onItemRecycled;
+
+        public override bool CanInteract(PlayerController playerController)
+            => playerController.updatables.FirstOfType<PlayerInteraction>()?.HasItem == true;
+
+        public override string GetInteractionHint(PlayerController playerController) => "Recycle";
         
         public override void InInteractZone(PlayerController playerController)
         {
@@ -35,6 +40,7 @@ namespace Core.Interaction
             {
                 HoldItem removedItem = playerInteraction.RemoveItem();
                 onItemRecycled?.Invoke(removedItem.Item);
+                Core.OnBoarding.OnBoardingController.Instance?.RecoverLostItem(removedItem.Item);
                 animator.SetTrigger("TriggerTrash");
                 audioSource.PlayOneShot(SFXDatabase.Instance.triggerTrashClip);
                 HideIndicator(playerController);

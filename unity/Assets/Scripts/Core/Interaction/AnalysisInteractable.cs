@@ -136,6 +136,9 @@ namespace Core.Interaction
             AnalysisInterface.Instance.ShowAnalysis(HoldingItems.First());
         }
 
+        public override string GetHoldInteractionHint(PlayerController playerController)
+            => HoldingItems.Count > 0 ? "Analyze" : string.Empty;
+
         private void ResetAnalysis()
         {
             holdTimer = 0f;

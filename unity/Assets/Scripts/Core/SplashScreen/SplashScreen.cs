@@ -28,24 +28,23 @@ namespace Core.SplashScreen
 
         public IEnumerator LoadMainMenuCoroutine()
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
             var mainMenu = SceneDatabase.Instance.GetSceneByName("MainMenu");
             
             AsyncOperation asyncSceneToLoad = SceneManager.LoadSceneAsync(mainMenu.sceneKey);
             asyncSceneToLoad.allowSceneActivation = false; // stop the level from activating
             while (asyncSceneToLoad.progress < 0.9f)
             {
-                yield return new WaitForEndOfFrame();
+                yield return null;
             } 
             asyncSceneToLoad.allowSceneActivation = true; // this will enter the level now
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForFixedUpdate();
+            yield return asyncSceneToLoad;
             
             LeanTween.alphaCanvas(parentCanvasGroup, 0f, 1f)
                 .setEase( LeanTweenType.easeOutQuart )
                 .setIgnoreTimeScale(true);
             
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSecondsRealtime(1f);
             Destroy(parentCanvasGroup.gameObject);
         }
     }

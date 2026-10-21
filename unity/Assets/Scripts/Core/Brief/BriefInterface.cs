@@ -31,6 +31,7 @@ namespace Core.Brief
         private bool _isActualBriefVisible = false;
 
         private Material _actualBriefMaterial;
+        public bool IsBriefPending => _tempNewBrief != null;
         
         public void Start()
         {
@@ -50,6 +51,13 @@ namespace Core.Brief
         {
             if (briefEndButton != null)
                 briefEndButton.onClick.RemoveListener(PutNewBrief);
+            if (_actualBriefMaterial != null) Destroy(_actualBriefMaterial);
+        }
+
+        private void OnDisable()
+        {
+            InputDatabase.Instance?.SetGameplayBlocked(this, false);
+            if (briefPanel != null) LeanTween.cancel(briefPanel);
         }
 
         public void Update()
@@ -100,15 +108,18 @@ namespace Core.Brief
 
         public void SetupNewBriefShow(Brief brief)
         {
+            if (brief == null) return;
+            _tempNewBrief = brief;
+            briefEndButton.interactable = true;
             PostProcessController.Instance.OnShowPanelPostProcess();
-            InputDatabase.Instance.DisableMovementInputs();
+            InputDatabase.Instance.SetGameplayBlocked(this, true);
             
             briefPanel.GetComponent<RectTransform>().localScale = Vector3.zero;
             briefPanel.gameObject.SetActive(true);
             GamepadNavigation.SelectFirstSelectable(briefPanel.gameObject);
             
             LeanTween.scale(briefPanel.GetComponent<RectTransform>(), new Vector3(1f, 1f, 1f), .4f)
-                .setEase(LeanTweenType.easeSpring);
+                .setEase(LeanTweenType.easeSpring).setIgnoreTimeScale(true);
             
             if (blackPanel != null)
             {
@@ -128,7 +139,8 @@ namespace Core.Brief
 
         public void PutNewBrief()
         {
-            
+            if (_tempNewBrief == null) return;
+            briefEndButton.interactable = false;
             BriefController.Instance.actualBrief = _tempNewBrief;
             TimerController.Instance.LaunchTimer(_tempNewBrief.timeForBrief);
             _tempNewBrief = null;
@@ -145,13 +157,14 @@ namespace Core.Brief
                 LeanTween.color(blackPanel.GetComponent<RectTransform>(), new Color(0f,0f,0f,0f), 1f)
                     .setEaseOutCirc();
             }
-            PostProcessController.Instance.OnHidePanelPostProcess();
-            InputDatabase.Instance.EnableMovementInputs();
             LeanTween.scale(briefPanel.GetComponent<RectTransform>(), new Vector3(0f, 0f, 0f), .4f)
-                .setEase(LeanTweenType.easeOutCirc)
+                .setEase(LeanTweenType.easeOutCirc).setIgnoreTimeScale(true)
                 .setOnComplete((() =>
                 {
                     briefPanel.gameObject.SetActive(false);
+                    InputDatabase.Instance.SetGameplayBlocked(this, false);
+                    if (!InputDatabase.Instance.GameplayBlocked)
+                        PostProcessController.Instance.OnHidePanelPostProcess();
                 }));
         }
     }

@@ -39,21 +39,24 @@ namespace Core.Interaction
         
         public override void InInteractZone(PlayerController playerController)
         {
-            PlayerInteraction playerInteraction = playerController.updatables.FirstOfType<PlayerInteraction>();
-            if (playerInteraction == null) return;
-            
-            if (playerInteraction.HasItem)
-            {
-                if (this.HoldingItems.Count < maxHoldableItems) base.InInteractZone(playerController);
-            } else
-            {
-                if (this.HoldingItems.Count > 0) base.InInteractZone(playerController);
-            }
+            if (CanInteract(playerController)) base.InInteractZone(playerController);
         }
 
         public virtual bool CanPlayerAddItem(PlayerController playerController)
         {
             return HoldingItems.Count < maxHoldableItems;
+        }
+
+        public override bool CanInteract(PlayerController playerController)
+        {
+            var player = playerController.updatables.FirstOfType<PlayerInteraction>();
+            return player != null && (player.HasItem ? CanPlayerAddItem(playerController) : HoldingItems.Count > 0);
+        }
+
+        public override string GetInteractionHint(PlayerController playerController)
+        {
+            var player = playerController.updatables.FirstOfType<PlayerInteraction>();
+            return player != null && player.HasItem ? "Place " + player.HoldingItem.Item.itemName : "Pick up";
         }
 
         public override void Interact(PlayerController playerController)
@@ -120,7 +123,6 @@ namespace Core.Interaction
 
         public override void InteractHold(PlayerController playerController)
         {
-            Debug.Log("Interacting hold with " + gameObject.name);
         }
 
         protected virtual void UpdateItemPositions()

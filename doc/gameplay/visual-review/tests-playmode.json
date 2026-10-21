@@ -1,0 +1,188 @@
+{
+  "status": "completed",
+  "duration": 50.91,
+  "summary": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.ChangingVirusUpdatesTheImageNameDescriptionAndRequestStatus",
+      "Status": "Passed",
+      "Duration": 2.490538,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.EmptySampleClearsThePreviousReportAndClosesTheWindow",
+      "Status": "Passed",
+      "Duration": 1.8274363,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.EmptyThreatProfileShowsAnExplicitStateWithoutInventingMeasurements",
+      "Status": "Passed",
+      "Duration": 0.8343146,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.IllustrationMovesWithUnscaledTimeAndResetsWithoutDrift",
+      "Status": "Passed",
+      "Duration": 2.8282372,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.MissingIconDoesNotReuseThePreviousSampleImage",
+      "Status": "Passed",
+      "Duration": 0.8284184,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.PopulatedProfileUsesItsActualNamesAndSignedValuesAndClearsOnSampleChange",
+      "Status": "Passed",
+      "Duration": 0.863198,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.ReportTextAndPreviewStayInSeparateColumnsAndExitClosesTheWindow",
+      "Status": "Passed",
+      "Duration": 1.9089232,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.AnalysisPresentationTests.WavySurfaceAndExitHoverUseTheExistingAnimatedUiStyle",
+      "Status": "Passed",
+      "Duration": 2.0364957,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.AnalysisUsesTheSameBackActionAsOtherWindows",
+      "Status": "Passed",
+      "Duration": 2.6346515,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.CancelRebindRestoresActionsAndLabel",
+      "Status": "Passed",
+      "Duration": 0.2201256,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.ClosingOneOwnerDoesNotUnlockAnotherWindow",
+      "Status": "Passed",
+      "Duration": 0.162783,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.GroupedRebindUpdatesTapAndHoldWithoutChangingGamepadBindings",
+      "Status": "Passed",
+      "Duration": 0.1609084,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.LostTutorialIngredientIsReplacedWithoutCharge",
+      "Status": "Passed",
+      "Duration": 0.1939321,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.NearestTargetAndPromptAgreeAndDoNotJumpWhileHolding",
+      "Status": "Passed",
+      "Duration": 1.0266925,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.PauseClosesWithUnscaledTimeAndReleasesItsLock",
+      "Status": "Passed",
+      "Duration": 0.7842862,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.PauseDoesNotIntroduceNaNInLiquidMaterials",
+      "Status": "Passed",
+      "Duration": 0.2077668,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.PauseOverBriefCannotReleaseTheBriefLock",
+      "Status": "Passed",
+      "Duration": 1.5779388,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.RecipesBlockActionsUntilClosingAnimationEnds",
+      "Status": "Passed",
+      "Duration": 0.8077901,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.TutorialCompletesAfterLosingAndRecoveringItsFinalSample",
+      "Status": "Passed",
+      "Duration": 19.463436,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.GameplayReliabilityTests.WrongCookingAndWrongShipmentKeepTutorialRecoverable",
+      "Status": "Passed",
+      "Duration": 0.2633675,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.VisualCompositionTests.RecipeListOpensAtTheTopAndCanReachTheLastRecipeWithoutCoveringTheHeader",
+      "Status": "Passed",
+      "Duration": 2.6931073,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.VisualCompositionTests.WindowTitlesAndExitButtonsHaveRoomAndCloseTheirOwnWindow",
+      "Status": "Passed",
+      "Duration": 4.3211248,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.VisualLayoutTests.MissionBriefsHaveRoomForTheirTitleAndDescription",
+      "Status": "Passed",
+      "Duration": 2.2281912,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.VisualLayoutTests.OutlineMasksAndFillsUseTheSameStencilReference",
+      "Status": "Passed",
+      "Duration": 0.2390924,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "VirusMania.Tests.VisualLayoutTests.TutorialHintsHaveRoomForEveryStep",
+      "Status": "Passed",
+      "Duration": 0.2130616,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

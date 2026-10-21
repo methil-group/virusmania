@@ -45,6 +45,7 @@ namespace Core.PostProcess
                 if (dofTweenId != -1) LeanTween.cancel(dofTweenId);
                 dofTweenId = LeanTween.value(gameObject, depthOfFieldEffect.focusDistance.value, 0f, 0.24f)
                     .setOnUpdate((float val) => { depthOfFieldEffect.focusDistance.value = val; })
+                    .setIgnoreTimeScale(true)
                     .id;
             }
 
@@ -53,6 +54,7 @@ namespace Core.PostProcess
                 if (vignetteTweenId != -1) LeanTween.cancel(vignetteTweenId);
                 vignetteTweenId = LeanTween.value(gameObject, vignetteEffect.intensity.value, 0.2f, 0.3f)
                     .setOnUpdate((float val) => { vignetteEffect.intensity.value = val; })
+                    .setIgnoreTimeScale(true)
                     .id;
             }
         }
@@ -65,6 +67,7 @@ namespace Core.PostProcess
                 dofTweenId = LeanTween.value(gameObject, depthOfFieldEffect.focusDistance.value, originalFocusDistance, 0.24f)
                     .setOnUpdate((float val) => { depthOfFieldEffect.focusDistance.value = val; })
                     .setOnComplete(() => { depthOfFieldEffect.active = false; })
+                    .setIgnoreTimeScale(true)
                     .id;
             }
 
@@ -74,6 +77,7 @@ namespace Core.PostProcess
                 vignetteTweenId = LeanTween.value(gameObject, vignetteEffect.intensity.value, 0f, 0.24f)
                     .setOnUpdate((float val) => { vignetteEffect.intensity.value = val; })
                     .setOnComplete(() => { vignetteEffect.active = false; })
+                    .setIgnoreTimeScale(true)
                     .id;
             }
         }

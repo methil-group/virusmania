@@ -1,0 +1,216 @@
+= VirusMania — Revue visuelle et boucle de gameplay
+:revdate: 2026-10-20
+
+50 captures classées, quatre scènes parcourues et trois résolutions contrôlées.
+Ouvrir link:index.html[la galerie hors ligne] pour parcourir et agrandir les écrans.
+Le schéma est disponible en link:boucle-gameplay.svg[SVG] et sa source en
+link:boucle-gameplay.mmd[Mermaid]. Les captures originales et leurs empreintes
+sont recensées dans link:captures.json[l'inventaire JSON].
+
+== Ce qui a été vérifié
+
+* SplashScreen : une image de l'animation de démarrage.
+* MainMenu : menu, choix du tutoriel, réglages audio, touches et réaffectation en attente.
+* Transition réelle entre MainMenu et Game.
+* OnBoarding : cinq étapes, bibliothèque limitée et message de récupération.
+* Game : trois briefs, rappel du brief, argent, temps, objet porté, cuisson et fusion.
+* Boutique : panier vide, panier rempli et fonds insuffisants.
+* Bibliothèque : haut, milieu et bas de la liste, incluant les cuissons.
+* Analyse, pause, réglages en pause, expédition refusée ou validée, victoire et défaite.
+* Résolutions natives 1280 × 720, 1920 × 1080 et 1024 × 768 pour les comparaisons indiquées.
+
+La galerie conserve quatre états avant correction : brief, titres de l'analyse,
+illustration incorrecte de l'analyse et tutoriel.
+Elle couvre les écrans distincts identifiés et les principaux états associés,
+sans prétendre couvrir chaque frame d'animation ou chaque combinaison d'objets.
+
+== Corrections réalisées sur dev
+
+. `BriefPanel.prefab` : hauteurs préférées des textes, espacement entre titre et description,
+  largeur contrôlée et marges plus généreuses du rappel de mission.
+. `OnBoardingPanel.prefab` : calcul de hauteur selon le texte, largeur contrôlée et marges.
+  Le long paragraphe de fusion tient désormais sous le titre Hint.
+. `AnalysisPanel.prefab` : panneau reconstruit avec les cadres et polices du jeu,
+  notes de l'échantillon à gauche, illustration correcte à droite et sortie explicite.
+  Les références à l'ancienne illustration fixe et aux éléments de démonstration ont été retirées.
+. Présentation de l'analyse : surface ondulée dérivée du brief, contour noir,
+  teinte de remplissage identique au brief dans le rendu capturé (RGB 46, 255, 80).
+  Suppression du cadre blanc autour du virus et du rappel de chrono redondant.
+  Boîte de Petri et reflet repris du brief, entrée progressive, flottement discret de
+  l'illustration et survol de sortie animé. Le texte demeure stable après l'entrée.
+. Boîte de Petri : le verre de l'image source est semi-transparent et laissait passer
+  le vert du panneau. Un matériau UI dédié rend l'intérieur opaque, en conservant les
+  détails gris et le contour découpé. La couche d'origine et son contour sont conservés
+  derrière le remplissage opaque ; le virus conserve son reflet et
+  l'ensemble conserve son mouvement.
+. `AnalysisInterface.cs` : actualiser ensemble nom, description, icône et statut par rapport
+  à la commande ; signaler l'absence de mesures ; effacer le rapport précédent lors d'une entrée vide.
+. `ThreatIndicator.prefab` et `ThreatOfDiseasePrefab.cs` : afficher les noms et valeurs signées
+  des mesures réellement fournies, dans une liste défilante. Aucun profil n'a été inventé.
+. `Outline.cs` : initialiser les propriétés du masque et du remplissage dès Awake,
+  avant de les attacher aux renderers. Leurs références stencil correspondent après chargement.
+. `ModalHeader.prefab` : composant partagé entre analyse, boutique et recettes.
+  Même police de titre, même alignement visuel vertical avec Exit et même marge latérale.
+  Le bouton est repris de la boutique d'origine, avec sa flèche, sa hauteur de 82 unités,
+  sa largeur ajustée au contenu, son ombre et son retour au survol.
+  L'en-tête est rapproché du bord du panneau. Le titre ANALYSIS reprend son
+  inclinaison fixe de trois degrés, avec la marge gauche conservée.
+. Analyse : référence au voile noir manquante rétablie. Image noire plein écran à
+  60 % d'opacité, située derrière le panneau et ses commandes ; elle intercepte les
+  clics jusqu'à la fermeture, puis devient transparente et laisse passer les clics.
+  La marge gauche du titre passe de 64 à 112 unités. La colonne de texte suit cette
+  marge. Le titre incliné reste attaché au bord supérieur, sans bascule à l'entrée.
+. Bibliothèque : zone de défilement distincte de l'en-tête, marge basse réservée,
+  indication de défilement et retour effectif au début après l'animation d'ouverture.
+  Un test de navigation a détecté que ScrollRect calculait ses limites pendant la mise
+  à l'échelle ; la remise au début se fait maintenant à la fin de l'ouverture.
+. Menu principal : colonne ancrée proportionnellement à la largeur pour conserver
+  le logo dans le cadre en 4:3, tout en gardant l'animation et le décor existants.
+
+Le contenu narratif, les coûts, les durées, les récompenses et les statistiques de menace
+n'ont pas été modifiés pendant cette revue. Les trois prefabs ont été enregistrés avec
+l'API PrefabUtility de l'Éditeur ; leur sérialisation inclut les mises à jour de format de Unity.
+
+== Évaluation
+
+La seconde passe compare les familles d'écrans entre elles, au-delà de l'analyse.
+Les modales de travail partagent maintenant une grille : marge gauche de 112 unités,
+titre de 104 unités à gauche, bouton Exit de la boutique à droite, centres visuels alignés.
+Le titre est proche du bord supérieur du panneau, sans flotter loin au-dessus.
+L'illustration peut bouger ; le texte et les actions gardent leur place au repos.
+Le menu conserve sa composition illustrée et la pause son fond rayé.
+
+Les principaux écarts visuels restants sont le sol de prototype du tutoriel, la présentation
+différente des options du menu et de la pause, le rappel de mission qui reste partiellement
+visible derrière les grandes fenêtres, ainsi que les écrans de fin encore très sommaires.
+L'absence de nom sous les ingrédients reste une friction de lecture dans les recettes.
+Cette passe harmonise les fenêtres de travail ; elle ne remplace pas une passe artistique
+sur les décors, les textes de fin et les illustrations manquantes.
+
+[cols="1,3,3",options="header"]
+|===
+|Priorité |Constat |Amélioration qui conserve le fun
+|Haute
+|Les profils de menace des virus des briefs restent vides dans les données du jeu. L'interface affiche désormais le bon virus, ses notes, sa correspondance avec la commande et l'absence de mesures.
+|Définir avec le game design des profils de menace et leur rôle dans la fabrication ou la validation.
+|Haute
+|Les ingrédients ne sont identifiés que par leurs icônes dans les formules ; le défilement manque de repères.
+|Surligner la recette de la commande, afficher les noms et ajouter une indication de défilement.
+|Moyenne
+|Le refus d'un envoi et la défaite expliquent peu l'erreur. Les fins proposent seulement Home.
+|Donner un indice court, un bilan et un bouton Rejouer.
+|Moyenne
+|La cuisson a peu de retour visible à distance ; un panier trop cher n'est pas signalé avant l'achat.
+|Afficher progression et état du poste ; signaler le dépassement près du prix total.
+|Moyenne
+|Le tutoriel utilise un sol de prototype et des termes différents pour certains postes.
+|Harmoniser le décor et les noms ; découper la longue consigne de fusion en actions courtes.
+|Moyenne
+|Le logo du menu, auparavant coupé en 1024 × 768, reste dans le cadre après correction des ancrages.
+|Conserver ce contrôle sur les futures animations et les formats plus étroits.
+|Basse
+|Les réglages du menu et de la pause ont deux présentations différentes ; l'appui long est peu expliqué dans les options.
+|Employer une structure commune et illustrer prise/dépose et maintien.
+|===
+
+Points solides : identité cartoon cohérente, actions physiques compréhensibles,
+fabrication en plusieurs étapes, progression du tutoriel et récupération après les erreurs.
+Le chronomètre continue dans la boutique, les recettes et l'analyse : c'est un choix de pression
+de jeu à expliquer au joueur. La vraie pause fige le temps.
+
+== Validation et limites
+
+25 tests PlayMode réussis, zéro échec, en 50,91 secondes dans l'Éditeur Unity 6000.6.6f1.
+Le détail est conservé dans link:tests-playmode.json[le rapport des tests].
+Le matériau de la boîte de Petri a également été contrôlé par compilation du shader,
+captures aux trois résolutions et vidéo.
+Aux douze scénarios de fiabilité s'ajoutent trois régressions :
+
+* place disponible pour chaque étape du tutoriel ;
+* place disponible et séparation des textes de chaque brief ;
+* correspondance des références stencil du masque et du remplissage des contours.
+
+Huit tests supplémentaires couvrent l'analyse : changement d'icône, de description et de statut
+pour chaque virus ; état sans mesures ; noms et valeurs signées d'un profil de test ; suppression
+des anciennes lignes ; absence d'icône sans réutilisation de l'image précédente ; entrée vide ;
+séparation des colonnes et fermeture par Exit. Les profils renseignés dans ces tests sont des
+objets temporaires, jamais des modifications des données de jeu.
+Les deux tests de présentation vérifient aussi le mouvement avec le temps figé,
+la remise à zéro sans dérive, le shader ondulé et le retour du bouton après survol.
+Deux contrôles de composition vérifient en plus les centres visuels et l'espace entre
+titre et Exit dans les trois fenêtres, leur fermeture respective, le début et la fin
+de la bibliothèque ainsi que son retour au début après fermeture et réouverture.
+Ils vérifient aussi la référence du voile noir, son opacité, sa couverture de l'écran,
+le blocage des clics en arrière-plan et sa libération à la fermeture, ainsi que la
+marge gauche et la proximité du titre avec le bord du panneau d'analyse.
+Les contrôles précédents n'avaient pas détecté la référence manquante du voile de l'analyse.
+
+La link:analysis-motion-petri.mp4[vidéo de l'analyse] montre ouverture, survol, changement de
+virus et fermeture dans le Game View. Les images sources ont été capturées pendant
+6,2 secondes, puis encodées à 25 i/s en conservant les durées.
+Cette vidéo vérifie la présentation et ne constitue pas une mesure de performances.
+
+Les tests de texte vérifient les rectangles et les hauteurs préférées.
+Les captures permettent en complément d'inspecter la police, les marges et les décors.
+
+Les captures sont celles du Game View de l'Éditeur, UI comprise.
+Les méthodes des interfaces servent à naviguer. Certaines étapes du tutoriel sont imposées
+par script ; les ingrédients des captures de fabrication sont injectés et le maintien de fusion
+est simulé par appels par frame. Le chrono est arrêté pour l'inspection prolongée des fenêtres.
+Les expéditions exécutent réellement SendItem, avec un produit préparé. Les fins de partie
+sont ouvertes directement. Le détail figure sous chaque capture dans la galerie.
+
+Une partie complète au clavier, le ressenti de difficulté, les transitions de victoire après
+trois missions réellement fabriquées, et le confort avec une vraie manette restent à jouer.
+Le nouveau panneau d'analyse a également été capturé en 1920 × 1080 et 1024 × 768,
+et trois virus ont été affichés successivement dans la même fenêtre.
+Boutique, recettes et menu ont aussi été capturés en 1920 × 1080 et 1024 × 768.
+Les captures 4:3 ne valident pas l'ensemble des autres fenêtres dans ce format.
+Le build Windows de la passe précédente n'a pas été reconstruit pendant cette revue ;
+utiliser l'Éditeur pour voir ces nouvelles mises en page.
+
+== Reproduire les captures
+
+Le script `tools/visual-review/VisualReview.cs` se compile en mémoire par Unity Pipeline,
+hors du dossier Assets. Il prépare des états d'inspection et doit être utilisé en Play Mode
+dans l'Éditeur. Les changements de scènes abandonnent la partie en cours de cette session
+de test. Il ne faut pas l'utiliser au milieu d'une partie à préserver.
+
+Depuis la racine du dépôt, avec Unity et Pipeline connectés :
+
+[source,powershell]
+----
+./tools/visual-review/CaptureReview.ps1 -Action load:Game -Name 40-brief-poliovirus
+./tools/visual-review/CaptureReview.ps1 -Action accept -Name 43-laboratoire
+./tools/visual-review/CaptureReview.ps1 -Action stop-timer
+./tools/visual-review/CaptureReview.ps1 -Action shop -Name 45-boutique
+./tools/visual-review/CaptureReview.ps1 -Action shop-close
+./tools/visual-review/CaptureReview.ps1 -Action library -Name 48-recettes-debut
+./tools/visual-review/CaptureReview.ps1 -Action scroll-bottom -Name 50-recettes-cuisson
+----
+
+Les PNG sont écrits directement dans `doc/gameplay/visual-review/captures/`,
+sans import d'images dans Assets ni ajout de fichiers .meta au projet.
+La lecture du rendu utilise l'encodeur écran du package Pipeline 0.8.0-exp.1 par réflexion ;
+ce point devra être adapté si l'API interne du package change.
+
+Après modification d'une capture, régénérer l'inventaire et la galerie :
+
+[source,powershell]
+----
+python tools/visual-review/build_gallery.py
+----
+
+Le générateur utilise seulement la bibliothèque standard Python et conserve les PNG intacts.
+La galerie fonctionne depuis le fichier local, sans réseau ni service externe.
+
+Pour relancer les tests dans l'Éditeur, ouvrir le Test Runner ou utiliser :
+
+[source,powershell]
+----
+unity command run_tests --mode playmode --async_tests true --project-path ./unity --format json
+unity command test_status --project-path ./unity --format json
+----
+
+
+

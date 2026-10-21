@@ -113,6 +113,7 @@ public class Outline : MonoBehaviour {
         LoadSmoothNormals();
 
         // Apply material properties immediately
+        UpdateMaterialProperties();
         needsUpdate = true;
     }
 

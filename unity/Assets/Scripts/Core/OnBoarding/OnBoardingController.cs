@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Computer.PathoNet;
 using Core.Interaction;
+using Core.Item.Cook;
 using Core.MergeLibrary;
 using Core.Scene;
 using Core.SFX;
@@ -17,7 +18,9 @@ namespace Core.OnBoarding
 
         public OnBoardingData GetActualOnBoarding()
         {
-            return OnBoardingDatabase.Instance.OnBoardings[actualOnBoardingIndex];
+            var boards = OnBoardingDatabase.Instance.OnBoardings;
+            return actualOnBoardingIndex >= 0 && actualOnBoardingIndex < boards.Count
+                ? boards[actualOnBoardingIndex] : null;
         }
 
         [SerializeField]
@@ -47,6 +50,7 @@ namespace Core.OnBoarding
         private Dictionary<Outline, float> _baseWidths = new Dictionary<Outline, float>();
         private Dictionary<Outline, Color> _originalColors = new Dictionary<Outline, Color>();
         private bool _eventsRegistered;
+        private bool _finishing;
 
         private void Pop(GameObject[] objects)
         {
@@ -165,7 +169,7 @@ namespace Core.OnBoarding
         private void OnRecipeListInteracted()
         {
             var boardingData = GetActualOnBoarding();
-            if (boardingData.onBoardingState != OnBoardingState.OpenLibrary)
+            if (boardingData == null || boardingData.onBoardingState != OnBoardingState.OpenLibrary)
                 return;
 
             Pop(new GameObject[] { computerObject, cartObject });
@@ -175,17 +179,19 @@ namespace Core.OnBoarding
         private void OnItemSent(Core.Item.Item item)
         {
             var boardingData = GetActualOnBoarding();
+            if (boardingData == null) return;
             if (boardingData.onBoardingState == OnBoardingState.SendItem &&
                 item == OnBoardingDatabase.Instance.itemToSent)
             {
                 GoNextOnBoarding();
             }
+            else RecoverLostItem(item);
         }
 
         private void OnItemMerged(Core.Item.Item item)
         {
             var boardingData = GetActualOnBoarding();
-            if (boardingData.onBoardingState == OnBoardingState.MergeItems &&
+            if (boardingData != null && boardingData.onBoardingState == OnBoardingState.MergeItems &&
                 item == OnBoardingDatabase.Instance.itemToMerge)
             {
                 Pop(new GameObject[] { sendItemInteractableObject });
@@ -196,19 +202,25 @@ namespace Core.OnBoarding
         private void OnItemCooked(Core.Item.Item item)
         {
             var boardingData = GetActualOnBoarding();
+            if (boardingData == null) return;
             if (boardingData.onBoardingState == OnBoardingState.CookItem &&
                 item == OnBoardingDatabase.Instance.itemToCook)
             {
                 Pop(new GameObject[] { brewInteractableObject });
                 GoNextOnBoarding();
             }
+            else if (item != OnBoardingDatabase.Instance.itemToCook)
+            {
+                var recipe = CookDatabase.Instance.Database.Find(r => r.resultItem == item);
+                if (recipe != null) RecoverLostItem(recipe.inputItem);
+            }
         }
 
         private void OnItemBought(Core.Item.Item item)
         {
             var boardingData = GetActualOnBoarding();
-            if (boardingData.onBoardingState != OnBoardingState.BuyItems ||
-                (_itemToBuy1Count == 1 && _itemToBuy2Count == 1))
+            if (boardingData == null || boardingData.onBoardingState != OnBoardingState.BuyItems ||
+                (_itemToBuy1Count >= 1 && _itemToBuy2Count >= 1))
                 return;
 
             if (item == OnBoardingDatabase.Instance.itemToBuy1)
@@ -217,7 +229,7 @@ namespace Core.OnBoarding
             if (item == OnBoardingDatabase.Instance.itemToBuy2)
                 _itemToBuy2Count++;
 
-            if (_itemToBuy1Count == 1 && _itemToBuy2Count == 1)
+            if (_itemToBuy1Count >= 1 && _itemToBuy2Count >= 1)
             {
                 GoNextOnBoarding();
                 Pop(new GameObject[] { cookInteractableObject });
@@ -238,8 +250,22 @@ namespace Core.OnBoarding
 
         public void FinishOnBoarding()
         {
+            if (_finishing) return;
+            _finishing = true;
             var newScene = SceneDatabase.Instance.GetSceneByName("Game");
             SceneTransitor.Instance.LoadScene(newScene);
+        }
+
+        public bool RecoverLostItem(Core.Item.Item item)
+        {
+            if (_finishing || item == null || GetActualOnBoarding() == null) return false;
+            var data = OnBoardingDatabase.Instance;
+            if (item != data.itemToBuy1 && item != data.itemToBuy2 &&
+                item != data.itemToCook && item != data.itemToMerge) return false;
+            if (pathoNetInterface == null || pathoNetInterface.pathoItemReceiver == null) return false;
+            pathoNetInterface.pathoItemReceiver.AddItem(item.GetHoldItem());
+            OnBoardingInterface.Instance?.ShowRecoveryHint(item.itemName);
+            return true;
         }
     }
 }

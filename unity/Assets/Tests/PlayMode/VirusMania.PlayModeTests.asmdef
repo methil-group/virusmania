@@ -1,0 +1,6 @@
+{
+  "name": "VirusMania.PlayModeTests",
+  "references": ["Unity.InputSystem", "Unity.TextMeshPro", "Unity.ugui"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

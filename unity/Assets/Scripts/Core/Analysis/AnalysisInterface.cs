@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using Core.Input;
 using Core.Item;
 using Core.Item.Holder;
-using Core.PostProcess;
+using Core.Brief;
 using Core.Prefab;
 using Framework.Controller;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.Analysis
 {
@@ -17,22 +17,40 @@ namespace Core.Analysis
         public TextMeshProUGUI diseaseNameText;
         public RectTransform diseaseThreatContainer;
         
-        private HoldItem _holdItem;
+        [Header("Sample report")]
+        [SerializeField] private Image sampleImage;
+        [SerializeField] private TextMeshProUGUI sampleDescriptionText;
+        [SerializeField] private TextMeshProUGUI requestStatusText;
+        [SerializeField] private TextMeshProUGUI emptyThreatText;
+        [SerializeField] private TextMeshProUGUI missingImageText;
+        [SerializeField] private GameObject threatListPanel;
+        [SerializeField] private AnalysisPresentation presentation;
         
         public void ShowAnalysis(HoldItem holdItemAnalyzed)
         {
             if (holdItemAnalyzed?.Item == null)
             {
+                ClearSample();
+                if (IsOpen) ClosePanel();
                 Debug.LogWarning("Cannot show analysis for an empty item.");
                 return;
             }
 
-            _holdItem = holdItemAnalyzed;
-            diseaseNameText.text = holdItemAnalyzed.Item.itemName;
-            foreach (Transform child in diseaseThreatContainer)
+            var item = holdItemAnalyzed.Item;
+            diseaseNameText.text = item.itemName;
+            if (sampleImage != null)
             {
-                Destroy(child.gameObject);
+                sampleImage.sprite = item.itemIcon;
+                sampleImage.enabled = item.itemIcon != null;
+                sampleImage.preserveAspect = true;
             }
+            if (missingImageText != null) missingImageText.gameObject.SetActive(item.itemIcon == null);
+            if (sampleDescriptionText != null)
+                sampleDescriptionText.text = string.IsNullOrWhiteSpace(item.itemDescription)
+                    ? "No sample notes recorded." : item.itemDescription;
+            UpdateRequestStatus(item);
+            ClearThreatRows();
+            int count = 0;
 
             if (holdItemAnalyzed is HoldVirusItem holdVirusItem && holdVirusItem.Item is VirusItem holdVirusItemData)
             {
@@ -46,50 +64,53 @@ namespace Core.Analysis
                     }
 
                     var threatPrefab = Instantiate(PrefabDatabase.Instance.analysisThreatPrefab, diseaseThreatContainer);
-                    threatPrefab.GetComponent<ThreatOfDiseasePrefab>().Setup(impact.threatType.threatTypeIcon, impact.threatImpact);
+                    threatPrefab.GetComponent<ThreatOfDiseasePrefab>().Setup(
+                        impact.threatType.threatTypeIcon, impact.threatImpact, impact.threatType.threatTypeName);
+                    count++;
                 }
             }
-            
+            if (emptyThreatText != null)
+            {
+                emptyThreatText.text = "No threat measurements recorded\nfor this sample.";
+                emptyThreatText.gameObject.SetActive(count == 0);
+            }
+            if (threatListPanel != null) threatListPanel.SetActive(count > 0);
             OpenPanel();
-        }
-        
-        public override void OpenPanel()
-        {
-            if (!CanOpen() || panel == null) return;
-            
-            panel.GetComponent<RectTransform>().localScale = Vector3.zero;
-            
-            PostProcessController.Instance.OnShowPanelPostProcess();
-            InputDatabase.Instance.DisableMovementInputs();
-            
-            LeanTween.cancel(panel);
-            LeanTween.scale(panel.GetComponent<RectTransform>(), new Vector3(1f, 1f, 1f), .4f)
-                .setEase(LeanTweenType.easeSpring);
-            
-            OnPanelOpen?.Invoke();
-            panel.SetActive(true);
-            GamepadNavigation.SelectFirstSelectable(panel);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(diseaseThreatContainer);
+            if (presentation != null) presentation.Present();
         }
 
-        public override void ClosePanel()
+        private void UpdateRequestStatus(Item.Item item)
         {
-            if (!IsOpen) return;
-            if (panel == null) return;
+            if (requestStatusText == null) return;
+            var brief = BriefController.Instance != null ? BriefController.Instance.actualBrief : null;
+            bool matches = brief != null && brief.wantedItem == item;
+            requestStatusText.text = brief == null ? "NO ACTIVE REQUEST"
+                : matches ? "MATCHES CURRENT REQUEST" : "DIFFERENT SAMPLE TO REQUEST";
+            requestStatusText.color = matches ? new Color(0.1f, 0.34f, 0.12f)
+                : brief == null ? Color.black : new Color(0.55f, 0.08f, 0.07f);
+        }
 
-            GamepadNavigation.ClearSelection(panel);
-            
-            PostProcessController.Instance.OnHidePanelPostProcess();
-            InputDatabase.Instance.EnableMovementInputs();
-            
-            LeanTween.cancel(panel);
-            LeanTween.scale(panel.GetComponent<RectTransform>(), new Vector3(0f, 0f, 0f), .4f)
-                .setEase(LeanTweenType.easeOutCirc)
-                .setOnComplete((() =>
-                {
-                    panel.gameObject.SetActive(false);
-                }));
-            
-            OnPanelClose?.Invoke();
+        private void ClearThreatRows()
+        {
+            foreach (Transform child in diseaseThreatContainer)
+            {
+                // Destroy is deferred; hide old rows immediately when changing samples.
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
+        }
+
+        private void ClearSample()
+        {
+            diseaseNameText.text = string.Empty;
+            if (sampleImage != null) { sampleImage.sprite = null; sampleImage.enabled = false; }
+            if (sampleDescriptionText != null) sampleDescriptionText.text = string.Empty;
+            if (requestStatusText != null) requestStatusText.text = string.Empty;
+            if (emptyThreatText != null) emptyThreatText.gameObject.SetActive(false);
+            if (missingImageText != null) missingImageText.gameObject.SetActive(false);
+            if (threatListPanel != null) threatListPanel.SetActive(false);
+            ClearThreatRows();
         }
     }
 }

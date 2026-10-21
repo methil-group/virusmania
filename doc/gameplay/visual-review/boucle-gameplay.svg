@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1210" role="img" aria-labelledby="title desc">
+<title id="title">VirusMania — navigation et boucle de gameplay</title><desc id="desc">Choisir le tutoriel, accepter un brief, consulter la recette, acheter, récupérer, cuire si nécessaire, fusionner, analyser si souhaité et envoyer. Une réussite récompense et mène au brief suivant ou à la victoire. Un mauvais envoi oblige à refabriquer ; le temps écoulé mène à la défaite.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#34423c"/></marker></defs>
+<style>text{font-family:Arial,sans-serif;fill:#18251e}.title{font-weight:700;font-size:30px}.label{font-weight:700;font-size:21px}.sub{font-size:16px;fill:#485b50}.small{font-size:15px;fill:#485b50}.edge{fill:none;stroke:#34423c;stroke-width:2.5;marker-end:url(#arrow)}.dash{stroke-dasharray:7 6}</style>
+<rect width="1400" height="1210" rx="24" fill="#f4f7f1"/><text class="title" x="54" y="56">VIRUSMANIA / BOUCLE DE GAMEPLAY</text><text class="sub" x="54" y="88">État observé sur dev · 20 octobre 2026 · les étapes facultatives sont indiquées</text>
+<rect x="42" y="405" width="1314" height="582" rx="22" fill="#e9f0e5" stroke="#cddbc8"/>
+<text class="label" x="54" y="136">ENTRER DANS LE JEU</text>
+<rect x="54" y="160" width="250" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="74" y="193">Splash → Menu</text>
+<text class="sub" x="74" y="219">Play · Options · Quit</text>
+<rect x="394" y="160" width="260" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="414" y="193">Choisir son départ</text>
+<text class="sub" x="414" y="219">Avec ou sans tutoriel</text>
+<rect x="744" y="160" width="600" height="114" rx="15" fill="#e4f8d9" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="764" y="193">Tutoriel facultatif · 5 étapes</text>
+<text class="sub" x="764" y="219">Recettes → Acheter → Cuire → Fusionner → Expédier</text>
+<text class="sub" x="764" y="240">Une erreur récupérable rend l&#x27;échantillon au chariot.</text>
+<path class="edge " d="M304 207 H384"/>
+<path class="edge " d="M654 207 H734"/>
+<path class="edge " d="M524 254 V335 H164 V485"/>
+<text class="small" x="322" y="324">Passer le tutoriel</text>
+<path class="edge " d="M1044 274 V370 H164 V485"/>
+<text class="small" x="756" y="359">Fin du tutoriel → partie normale</text>
+<text class="label" x="66" y="449">UNE MISSION · 120 SECONDES APRÈS ACCEPTATION</text>
+<rect x="66" y="495" width="230" height="94" rx="15" fill="#c7ffad" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="86" y="528">1 · Accepter</text>
+<text class="sub" x="86" y="554">Brief · cible · gain</text>
+<rect x="406" y="495" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="426" y="528">2 · Recette</text>
+<text class="sub" x="426" y="554">Consulter la formule</text>
+<rect x="746" y="495" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="766" y="528">3 · Acheter</text>
+<text class="sub" x="766" y="554">Dépenser son budget</text>
+<rect x="1086" y="495" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="1106" y="528">4 · Récupérer</text>
+<text class="sub" x="1106" y="554">Livraison au chariot</text>
+<path class="edge " d="M296 542 H396"/>
+<path class="edge " d="M636 542 H736"/>
+<path class="edge " d="M976 542 H1076"/>
+<rect x="1086" y="690" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="1106" y="723">5 · Cuire si besoin</text>
+<text class="sub" x="1106" y="749">Bain-marie · 8 s</text>
+<rect x="746" y="690" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="766" y="723">6 · Fusionner</text>
+<text class="sub" x="766" y="749">Maintenir · 5 s</text>
+<rect x="406" y="690" width="230" height="94" rx="15" fill="#edf0ff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="426" y="723">7 · Analyser</text>
+<text class="sub" x="426" y="749">Facultatif · 2 s</text>
+<rect x="66" y="690" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="86" y="723">8 · Envoyer</text>
+<text class="sub" x="86" y="749">Échantillon + levier</text>
+<path class="edge " d="M1201 589 V680"/>
+<path class="edge " d="M1086 737 H986"/>
+<path class="edge " d="M746 737 H646"/>
+<path class="edge " d="M406 737 H306"/>
+<rect x="66" y="876" width="230" height="94" rx="15" fill="#fff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="86" y="909">Vérifier la cible</text>
+<text class="sub" x="86" y="935">Voyant vert ou rouge</text>
+<rect x="406" y="876" width="230" height="94" rx="15" fill="#c7ffad" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="426" y="909">Bon échantillon</text>
+<text class="sub" x="426" y="935">Gain : 35 / 50 / 80 $</text>
+<rect x="746" y="876" width="230" height="94" rx="15" fill="#c7ffad" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="766" y="909">Brief suivant</text>
+<text class="sub" x="766" y="935">S&#x27;il reste une mission</text>
+<rect x="1086" y="876" width="230" height="94" rx="15" fill="#c7ffad" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="1106" y="909">Victoire</text>
+<text class="sub" x="1106" y="935">Après les 3 briefs</text>
+<path class="edge " d="M181 784 V866"/>
+<path class="edge " d="M296 923 H396"/>
+<path class="edge " d="M636 923 H736"/>
+<path class="edge " d="M521 970 V1000 H1201 V980"/>
+<text class="small" x="832" y="1022">Dernier brief réussi</text>
+<path class="edge dash" d="M861 876 V839 H24 V542 H56"/>
+<text class="small" x="318" y="826">Nouvelle commande : même boucle</text>
+<rect x="66" y="1060" width="340" height="106" rx="15" fill="#ffe3d9" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="86" y="1093">Mauvais envoi</text>
+<text class="sub" x="86" y="1119">Échantillon perdu ; refabriquer.</text>
+<text class="sub" x="86" y="1140">Le chrono continue.</text>
+<path class="edge " d="M181 970 V1050"/>
+<rect x="466" y="1060" width="390" height="106" rx="15" fill="#edf0ff" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="486" y="1093">Pause / Échap</text>
+<text class="sub" x="486" y="1119">Fige le temps. Ferme d&#x27;abord</text>
+<text class="sub" x="486" y="1140">la fenêtre ouverte avant de pauser.</text>
+<rect x="916" y="1060" width="400" height="106" rx="15" fill="#ffe3d9" stroke="#bac9bd" stroke-width="1.5"/>
+<text class="label" x="936" y="1093">Chrono écoulé → Défaite</text>
+<text class="sub" x="936" y="1119">Le temps continue dans les fenêtres</text>
+<text class="sub" x="936" y="1140">boutique, recettes et analyse.</text>
+</svg>

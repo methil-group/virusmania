@@ -30,7 +30,7 @@ namespace Core.Player
         public override void Start(PlayerController controller)
         {
             _moveAction = InputDatabase.Instance.moveAction;
-            _moveAction.action.Enable();
+            InputDatabase.Instance.RefreshGameplayInputs();
             rb = controller.GetComponent<Rigidbody>();
             walkSource.loop = true;
             walkSource.clip = SFXDatabase.Instance.walkClip;
@@ -38,6 +38,15 @@ namespace Core.Player
 
         public override void FixedUpdate(PlayerController controller)
         {
+            if (InputDatabase.Instance.GameplayBlocked)
+            {
+                currentVelocity = Vector3.zero;
+                var velocity = rb.linearVelocity;
+                rb.linearVelocity = new Vector3(0f, velocity.y, 0f);
+                animator.SetFloat("Speed", 0f);
+                if (walkSource.isPlaying) walkSource.Stop();
+                return;
+            }
             Vector2 input = _moveAction.action.ReadValue<Vector2>();
             Vector3 targetVelocity = new Vector3(input.x, 0, input.y) * speed;
             currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);

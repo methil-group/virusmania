@@ -7,6 +7,7 @@ namespace Core.Interaction
 {
     public class ComputerInteractable : Interactable
     {
+        public override string GetInteractionHint(PlayerController playerController) => "Open shop";
         public Light computerLight;
         public Renderer computerScreenRenderer;
         private Material _computerScreenMaterial;

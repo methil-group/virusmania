@@ -5,6 +5,7 @@ using UnityEngine;
 public class Wobble : MonoBehaviour
 {
     Renderer rend;
+    Material liquidMaterial;
     Vector3 lastPos;
     Vector3 velocity;
     Vector3 lastRot;  
@@ -23,10 +24,19 @@ public class Wobble : MonoBehaviour
     void Start()
     {
         rend = GetComponent<Renderer>();
-        rend.material = new Material(rend.material);
+        liquidMaterial = new Material(rend.sharedMaterial);
+        rend.sharedMaterial = liquidMaterial;
+        lastPos = transform.position;
+        lastRot = transform.rotation.eulerAngles;
     }
     private void Update()
     {
+        if (Time.deltaTime <= 0f)
+        {
+            lastPos = transform.position;
+            lastRot = transform.rotation.eulerAngles;
+            return;
+        }
         time += Time.deltaTime;
         // decrease wobble over time
         wobbleAmountToAddX = Mathf.Lerp(wobbleAmountToAddX, 0, Time.deltaTime * (Recovery));
@@ -38,8 +48,8 @@ public class Wobble : MonoBehaviour
         wobbleAmountZ = wobbleAmountToAddZ * Mathf.Sin(pulse * time);
 
         // send it to the shader
-        rend.material.SetFloat("_WobbleX", wobbleAmountX);
-        rend.material.SetFloat("_WobbleZ", wobbleAmountZ);
+        liquidMaterial.SetFloat("_WobbleX", wobbleAmountX);
+        liquidMaterial.SetFloat("_WobbleZ", wobbleAmountZ);
 
         // velocity
         velocity = (lastPos - transform.position) / Time.deltaTime;
@@ -53,6 +63,11 @@ public class Wobble : MonoBehaviour
         // keep last position
         lastPos = transform.position;
         lastRot = transform.rotation.eulerAngles;
+    }
+
+    private void OnDestroy()
+    {
+        if (liquidMaterial != null) Destroy(liquidMaterial);
     }
 
 

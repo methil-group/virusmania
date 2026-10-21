@@ -1,0 +1,10 @@
+{
+  "passed": 25,
+  "total": 25,
+  "date": "2026-10-20",
+  "summary": "25 tests PlayMode réussis / 0 échec",
+  "report": "tests-playmode.json",
+  "failed": 0,
+  "mode": "PlayMode",
+  "durationSeconds": 50.91
+}

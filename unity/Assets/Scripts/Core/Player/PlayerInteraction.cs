@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Core.Interaction;
 using Framework;
 using Framework.Extensions;
@@ -8,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Core.SFX;
+using Core.Input;
 
 namespace Core.Player
 {
@@ -22,6 +22,7 @@ namespace Core.Player
         [Header("Interaction Settings")]
         [SerializeField] private float interactionDistance = 2f;
         [SerializeField] private float interactionRadius = 0.5f;
+        [SerializeField] private LayerMask interactionLayers = ~0;
 
         [Header("Interaction Input")]
         [SerializeField] private InputActionReference interactionAction;
@@ -40,7 +41,11 @@ namespace Core.Player
         public HoldItem HoldingItem => _holdingItem;
         public bool HasItem => _holdingItem != null;
 
-        private HashSet<Interactable> _interactablesInRange = new HashSet<Interactable>();
+        private Collider[] _hits = new Collider[32];
+        private Interactable _target;
+        private Interactable _holdTarget;
+        public Interactable CurrentTarget => _target;
+        public string InteractionHint => _target != null ? _target.GetInteractionHint(_playerController) : string.Empty;
 
         public UnityAction<HoldItem> OnItemAdded;
         public UnityAction<HoldItem> OnItemRemoved;
@@ -49,6 +54,9 @@ namespace Core.Player
         {
             _playerController = controller;
             _playerMovement = controller.updatables.FirstOfType<PlayerMovement>();
+            var prompt = controller.GetComponent<PlayerInteractionPrompt>();
+            if (prompt == null) prompt = controller.gameObject.AddComponent<PlayerInteractionPrompt>();
+            prompt.Setup(this, controller);
 
             if (interactionAction == null || interactionHoldAction == null)
                 return;
@@ -57,11 +65,10 @@ namespace Core.Player
             _interactionHoldInput = interactionHoldAction.action;
 
             _interactionInput.performed += OnInteractionPerformed;
-            _interactionInput.Enable();
 
             _interactionHoldInput.performed += OnInteractionHoldPerformed;
             _interactionHoldInput.canceled += OnInteractionHoldCanceled;
-            _interactionHoldInput.Enable();
+            InputDatabase.Instance.RefreshGameplayInputs();
         }
 
         public override void OnDestroy(PlayerController controller)
@@ -76,6 +83,7 @@ namespace Core.Player
             }
 
             _isInteractingHeld = false;
+            SetTarget(null, controller);
             _playerController = null;
         }
 
@@ -87,80 +95,90 @@ namespace Core.Player
 
         private void OnInteractionHoldPerformed(InputAction.CallbackContext context)
         {
+            if (!CanUseInputs()) return;
             _isInteractingHeld = true;
+            _holdTarget = FindTarget(_playerController);
         }
 
         private void OnInteractionHoldCanceled(InputAction.CallbackContext context)
         {
             _isInteractingHeld = false;
+            _holdTarget = null;
         }
 
         public override void Update(PlayerController controller)
         {
+            if (!CanUseInputs())
+            {
+                _isInteractingHeld = false;
+                _holdTarget = null;
+                SetTarget(null, controller);
+                return;
+            }
+            SetTarget(FindTarget(controller), controller);
+            if (_target != null) _target.InInteractZone(controller);
             if (_isInteractingHeld)
                 InteractHold(controller);
+        }
 
-            Vector3 origin = controller.body.transform.position.AddY(1.4f);
-            Vector3 center = origin + _playerMovement.direction * interactionDistance;
+        private bool CanUseInputs()
+        {
+            return _playerController != null && Time.timeScale > 0f &&
+                   InputDatabase.Instance != null && !InputDatabase.Instance.GameplayBlocked;
+        }
 
-            Collider[] hits = Physics.OverlapSphere(center, interactionRadius);
-
-            HashSet<Interactable> currentFrameInteractables = new HashSet<Interactable>();
-
-            foreach (var hit in hits)
+        private Interactable FindTarget(PlayerController controller)
+        {
+            if (controller?.body == null || _playerMovement == null) return null;
+            Vector3 direction = _playerMovement.direction.sqrMagnitude > 0.001f
+                ? _playerMovement.direction : controller.body.forward;
+            Vector3 center = controller.body.position.AddY(1.4f) + direction * interactionDistance;
+            int count;
+            while ((count = Physics.OverlapSphereNonAlloc(center, interactionRadius, _hits,
+                       interactionLayers, QueryTriggerInteraction.Collide)) == _hits.Length)
+                Array.Resize(ref _hits, _hits.Length * 2);
+            Interactable best = null;
+            float bestDistance = float.PositiveInfinity;
+            for (int i = 0; i < count; i++)
             {
-                if (hit.TryGetComponent<Interactable>(out var interactable) &&
-                    interactable.CanInteract(controller))
+                var candidate = _hits[i].GetComponentInParent<Interactable>();
+                if (candidate == null || !candidate.isActiveAndEnabled || !candidate.CanInteract(controller)) continue;
+                float distance = (_hits[i].ClosestPoint(center) - center).sqrMagnitude;
+                if (distance < bestDistance - 0.0001f ||
+                    (Mathf.Abs(distance - bestDistance) <= 0.0001f &&
+                     (candidate == _target || (best != _target &&
+                      (best == null || candidate.GetEntityId().CompareTo(best.GetEntityId()) < 0)))))
                 {
-                    interactable.InInteractZone(controller);
-                    currentFrameInteractables.Add(interactable);
-                    break;
+                    best = candidate;
+                    bestDistance = distance;
                 }
             }
+            return best;
+        }
 
-            foreach (var oldInteractable in _interactablesInRange)
-            {
-                if (!currentFrameInteractables.Contains(oldInteractable))
-                {
-                    oldInteractable.HideIndicator(controller);
-                }
-            }
-
-            _interactablesInRange = currentFrameInteractables;
+        private void SetTarget(Interactable target, PlayerController controller)
+        {
+            if (_target == target) return;
+            if (_target != null) _target.HideIndicator(controller);
+            _target = target;
         }
 
         public void InteractHold(PlayerController playerController)
         {
-            Vector3 origin = playerController.body.transform.position.AddY(1.4f);
-            Vector3 center = origin + _playerMovement.direction * interactionDistance;
-
-            Collider[] hits = Physics.OverlapSphere(center, interactionRadius);
-            foreach (var hit in hits)
+            if (!CanUseInputs()) return;
+            if (_holdTarget == null || _holdTarget != _target || !_holdTarget.CanInteract(playerController))
             {
-                if (hit.TryGetComponent<Interactable>(out var holdable) &&
-                    holdable.CanInteract(playerController))
-                {
-                    holdable.InteractHold(playerController);
-                    break;
-                }
+                _isInteractingHeld = false;
+                return;
             }
+            _holdTarget.InteractHold(playerController);
         }
 
         public void Interact(PlayerController controller)
         {
-            Vector3 origin = controller.body.transform.position.AddY(1.4f);
-            Vector3 center = origin + _playerMovement.direction * interactionDistance;
-
-            Collider[] hits = Physics.OverlapSphere(center, interactionRadius);
-            foreach (var hit in hits)
-            {
-                if (hit.TryGetComponent<Interactable>(out var interactable) &&
-                    interactable.CanInteract(controller))
-                {
-                    interactable.Interact(controller);
-                    break;
-                }
-            }
+            if (!CanUseInputs()) return;
+            SetTarget(FindTarget(controller), controller);
+            if (_target != null) _target.Interact(controller);
         }
 
         public HoldItem RemoveItem()

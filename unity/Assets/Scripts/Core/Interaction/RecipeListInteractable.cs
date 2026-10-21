@@ -6,6 +6,7 @@ namespace Core.Interaction
 {
     public class RecipeListInteractable : Interactable
     {
+        public override string GetInteractionHint(PlayerController playerController) => "View recipes";
         public UnityAction OnInteractRecipeList;
         
         public override void Interact(PlayerController playerController)
